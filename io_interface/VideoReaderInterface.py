@@ -5,10 +5,10 @@ import numpy as np
 
 class VideoReaderInterface(ABC):
 
-    def __init__(self,name,video_path,fps):
-        self.name=name
-        self.video_path=video_path
-        self.fps=fps
+    def __init__(self, name, video_path, fps):
+        self.name = name
+        self.video_path = video_path
+        self.fps = fps
 
     @abstractmethod
     def seek_pos(self, index: int) -> None:
