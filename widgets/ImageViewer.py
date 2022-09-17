@@ -1,10 +1,10 @@
 from PIL import Image
 from PIL.ImageQt import ImageQt
-from PySide2.QtWidgets import QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QFrame
 from PySide2.QtCore import Signal, QRectF, QPointF
-from PySide2.QtGui import Qt, QPixmap, QTransform
+from PySide2.QtGui import Qt, QPixmap
+from PySide2.QtWidgets import QGraphicsView, QGraphicsScene, QGraphicsPixmapItem, QFrame
 
-from ui_Skeleton import Marker
+from ui_Skeleton import Marker, SkeletonController
 
 
 class ImageViewer(QGraphicsView):
@@ -37,6 +37,7 @@ class ImageViewer(QGraphicsView):
             factor = min(viewrect.width() / scenerect.width(),
                          viewrect.height() / scenerect.height())
             self.scale(factor, factor)
+            self.zoom_times = 0
 
     def wheelEvent(self, event):
         if self.zoom_flag:
@@ -66,26 +67,35 @@ class ImageViewer(QGraphicsView):
             self.setDragMode(QGraphicsView.NoDrag)
         super().keyReleaseEvent(event)
 
-    def draw_frame(self,frame):
+    def draw_frame(self, frame):
         pixmap = QPixmap.fromImage(ImageQt(Image.fromarray(frame)))
         self.pixmap_item.setPixmap(pixmap)
         self.update()
 
-    def draw_skeleton(self,skeleton):
-        if skeleton in self.scene.items():
-            self.scene.removeItem(skeleton)
-        self.scene.addItem(skeleton)
+    def draw_skeleton(self, skeleton: SkeletonController):
+        # TODO Redesign drawing, no need to remove and add graphics items on every update.
+        for line in skeleton.lines:
+            if line in self.scene.items():
+                pass  # self.scene.removeItem(line)
+            else:
+                self.scene.addItem(line)
+        for marker in skeleton.markers.values():
+            if marker in self.scene.items():
+                pass  # self.scene.removeItem(marker)
+            else:
+                self.scene.addItem(marker)
         self.update()
 
-class AnnotationImageViewer(ImageViewer):
 
+class AnnotationImageViewer(ImageViewer):
     delete_keypoint = Signal(int, bool)
     modify_keypoint = Signal(QPointF)
     scroll_keypoint = Signal(int)
     select_keypoint = Signal(int, bool)
 
-    def __init__(self,parent=None):
+    def __init__(self, parent=None):
         super(AnnotationImageViewer, self).__init__(parent)
+        self.selected_marker = None
 
     def mousePressEvent(self, event):
         if event.button() == Qt.MidButton and not self.zoom_flag:
@@ -93,11 +103,21 @@ class AnnotationImageViewer(ImageViewer):
         if event.button() == Qt.LeftButton and not self.zoom_flag:
             new_position = self.pixmap_item.mapFromScene(self.mapToScene(event.pos()))
             clicked_item = self.scene.itemAt(new_position, self.transform())
-            if type(clicked_item) != Marker:
-                self.modify_keypoint.emit(new_position)
-            else:
+            if type(clicked_item) == Marker:
                 self.select_keypoint.emit(clicked_item.idx, True)
+                self.selected_marker = clicked_item
+        if event.button() == Qt.RightButton and not self.zoom_flag:
+            new_position = self.pixmap_item.mapFromScene(self.mapToScene(event.pos()))
+            self.modify_keypoint.emit(new_position)
         super().mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event):
+        if event.button() == Qt.LeftButton and self.selected_marker is not None:
+            new_position = self.pixmap_item.mapFromScene(self.mapToScene(event.pos()))
+            self.select_keypoint.emit(self.selected_marker.idx, True)
+            self.modify_keypoint.emit(new_position)
+            self.selected_marker = None
+        super().mouseReleaseEvent(event)
 
     def wheelEvent(self, event):
         if not self.zoom_flag:

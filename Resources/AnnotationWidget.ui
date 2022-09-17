@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1062</width>
+    <width>1130</width>
     <height>735</height>
    </rect>
   </property>
@@ -62,7 +62,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>0</number>
        </property>
        <property name="tabSpacing">
         <number>6</number>
@@ -73,7 +73,7 @@
           <x>0</x>
           <y>0</y>
           <width>200</width>
-          <height>575</height>
+          <height>543</height>
          </rect>
         </property>
         <attribute name="label">
@@ -96,6 +96,12 @@
           <layout class="QVBoxLayout" name="verticalLayout_4" stretch="2,0,1">
            <item>
             <widget class="QScrollArea" name="scrollArea_2">
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
+             <property name="verticalScrollBarPolicy">
+              <enum>Qt::ScrollBarAsNeeded</enum>
+             </property>
              <property name="widgetResizable">
               <bool>true</bool>
              </property>
@@ -105,7 +111,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>194</width>
-                <height>367</height>
+                <height>345</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -135,6 +141,9 @@
            </item>
            <item>
             <widget class="QScrollArea" name="scrollArea_3">
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
              <property name="widgetResizable">
               <bool>true</bool>
              </property>
@@ -144,7 +153,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>194</width>
-                <height>181</height>
+                <height>171</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -169,7 +178,7 @@
           <x>0</x>
           <y>0</y>
           <width>200</width>
-          <height>575</height>
+          <height>543</height>
          </rect>
         </property>
         <attribute name="label">
@@ -190,6 +199,9 @@
          </property>
          <item>
           <widget class="QScrollArea" name="scrollArea">
+           <property name="frameShadow">
+            <enum>QFrame::Plain</enum>
+           </property>
            <property name="widgetResizable">
             <bool>true</bool>
            </property>
@@ -199,7 +211,7 @@
               <x>0</x>
               <y>0</y>
               <width>196</width>
-              <height>375</height>
+              <height>354</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -283,6 +295,128 @@
          </item>
         </layout>
        </widget>
+       <widget class="QWidget" name="reprojectionToolBox">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>200</width>
+          <height>543</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>3D Reprojection</string>
+        </attribute>
+        <layout class="QVBoxLayout" name="verticalLayout_9" stretch="1,0">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,1">
+           <item>
+            <widget class="QScrollArea" name="scrollArea_4">
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
+             </property>
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents_3">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>194</width>
+                <height>234</height>
+               </rect>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout">
+               <property name="spacing">
+                <number>3</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <layout class="QVBoxLayout" name="reprojKeypointList"/>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QScrollArea" name="scrollArea_5">
+             <property name="frameShadow">
+              <enum>QFrame::Plain</enum>
+             </property>
+             <property name="widgetResizable">
+              <bool>true</bool>
+             </property>
+             <widget class="QWidget" name="scrollAreaWidgetContents_4">
+              <property name="geometry">
+               <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>194</width>
+                <height>233</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_13">
+               <property name="spacing">
+                <number>3</number>
+               </property>
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <item>
+                <layout class="QVBoxLayout" name="viewList"/>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <widget class="QPushButton" name="reprojectButton">
+           <property name="text">
+            <string>Reproject</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </item>
     </layout>
@@ -298,7 +432,7 @@
      <property name="autoFillBackground">
       <bool>false</bool>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0,0,0,0,0,3">
+     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0,0,0,0,0,0,3">
       <property name="sizeConstraint">
        <enum>QLayout::SetDefaultConstraint</enum>
       </property>
@@ -440,6 +574,22 @@
         </property>
         <property name="shortcut">
          <string>Right</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="speedFactor">
+        <property name="minimum">
+         <double>0.250000000000000</double>
+        </property>
+        <property name="maximum">
+         <double>1.500000000000000</double>
+        </property>
+        <property name="singleStep">
+         <double>0.250000000000000</double>
+        </property>
+        <property name="value">
+         <double>1.000000000000000</double>
         </property>
        </widget>
       </item>

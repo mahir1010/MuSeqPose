@@ -1,0 +1,39 @@
+from OptiPose.data_store_interface import initialize_datastore_reader
+from OptiPose.video_reader_interface import initialize_video_reader
+from player_interface.PlayerInterface import PlayerInterface
+
+
+class VideoPlayer(PlayerInterface):
+
+    def __init__(self, config, view_data):
+        super(VideoPlayer, self).__init__(config, view_data)
+        self.video_reader = initialize_video_reader(view_data['video_file'], int(view_data['framerate']),
+                                                    view_data['video_reader'])
+        self.data_store = initialize_datastore_reader(self.config['body_parts'], view_data['annotation_file'],
+                                                      view_data['annotation_file_flavor'])
+        self.current_frame = None
+
+    def render_next_frame(self, image_viewer):
+        frame = self.video_reader.next_frame()
+        if frame is not None:
+            previous_behaviour = ""
+            if self.data_point is not None:
+                self.data_store.set_skeleton(self.frame_number, self.data_point)
+                previous_behaviour = self.data_point.behaviour
+            self.frame_number = self.video_reader.get_current_index()
+            self.data_point = self.data_store.get_skeleton(self.frame_number)
+            self.data_point.behaviour = previous_behaviour if self.data_point.behaviour not in self.config[
+                'behaviours'] else self.data_point.behaviour
+            image_viewer.draw_frame(frame)
+            self.current_frame = frame
+        return self.frame_number
+
+    def render_previous_frame(self):
+        if self.frame_number != 0:
+            self.seek(self.frame_number - 1)
+
+    def seek(self, frame_number):
+        self.video_reader.seek_pos(max(0, frame_number))
+
+    def get_number_of_frames(self):
+        return self.video_reader.get_number_of_frames()

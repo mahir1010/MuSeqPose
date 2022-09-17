@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <author>MahirP</author>
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>mainWindow</class>
+ <widget class="QMainWindow" name="mainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,6 +13,51 @@
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWidget{
+	background-color: rgb(10,10,10);
+}
+QLineEdit,QSlider, QScrollArea, QProgressBar{
+border:1px solid  rgb(40,40,40);
+}
+QCheckBox::indicator{
+border:2px solid rgb(40,40,40);
+}
+QCheckBox::indicator::checked{
+color: rgb(14, 77, 179);
+background:rgb(14, 77, 179);
+}
+QRadioButton::indicator{
+border:2px solid rgb(40,40,40);
+width:10px;
+height:10px;
+border-radius:5px;
+background:None;
+}
+QRadioButton::indicator::checked{
+color: rgb(14, 77, 179);
+background:rgb(14, 77, 179);
+}
+QScrollBar::handle:vertical {         
+			margin:4px;
+			border:1px solid black;
+			border-radius: 10px;
+			background-color: rgb(14, 77, 179);
+        }
+ QScrollBar::add-line:vertical {       
+            height: 0px;
+            subcontrol-position: bottom;
+            subcontrol-origin: margin;
+        }
+        QScrollBar::sub-line:vertical {
+            height: 0 px;
+            subcontrol-position: top;
+            subcontrol-origin: margin;
+        }</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="minimumSize">
@@ -38,11 +83,21 @@
      <number>0</number>
     </property>
     <item row="1" column="0">
-     <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
+     <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0">
       <item>
        <widget class="QTabWidget" name="viewTabWidget">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <property name="currentIndex">
          <number>-1</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="status">
+        <property name="text">
+         <string/>
         </property>
        </widget>
       </item>
@@ -66,6 +121,7 @@
     <addaction name="actionNew"/>
     <addaction name="actionLoad"/>
     <addaction name="actionSave"/>
+    <addaction name="actionSave_Config"/>
    </widget>
    <addaction name="menuProject"/>
   </widget>
@@ -87,10 +143,18 @@
   </action>
   <action name="actionSave">
    <property name="text">
-    <string>Save</string>
+    <string>Save Data</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_Config">
+   <property name="text">
+    <string>Save Config</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+S</string>
    </property>
   </action>
  </widget>

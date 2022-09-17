@@ -1,520 +1,548 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>1062</width>
-    <height>735</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
-  <layout class="QGridLayout" name="gridLayout" rowstretch="0,0" columnstretch="5,0">
-   <item row="0" column="1">
-    <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0">
-     <property name="sizeConstraint">
-      <enum>QLayout::SetFixedSize</enum>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QLabel" name="frameNumber">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>30</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>200</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Frame-Number :</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QToolBox" name="toolBox">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>200</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="currentIndex">
-        <number>1</number>
-       </property>
-       <property name="tabSpacing">
-        <number>6</number>
-       </property>
-       <widget class="QWidget" name="page">
+    <class>Form</class>
+    <widget class="QWidget" name="Form">
         <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>200</width>
-          <height>575</height>
-         </rect>
-        </property>
-        <attribute name="label">
-         <string>Annotation</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <layout class="QVBoxLayout" name="verticalLayout_4" stretch="2,0,1">
-           <item>
-            <widget class="QScrollArea" name="scrollArea_2">
-             <property name="widgetResizable">
-              <bool>true</bool>
-             </property>
-             <widget class="QWidget" name="widget">
-              <property name="geometry">
-               <rect>
+            <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>194</width>
-                <height>367</height>
-               </rect>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_7">
-               <item>
-                <layout class="QVBoxLayout" name="keypoint_container">
-                 <property name="spacing">
-                  <number>0</number>
-                 </property>
+                <width>1062</width>
+                <height>735</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>Form</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout" rowstretch="0,0" columnstretch="5,0">
+            <item row="0" column="0">
+                <widget class="QWidget" name="view_widget" native="true">
+                    <property name="sizePolicy">
+                        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                            <horstretch>1</horstretch>
+                            <verstretch>1</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <layout class="QVBoxLayout" name="verticalLayout_10">
+                        <item>
+                            <layout class="QVBoxLayout" name="view_container"/>
+                        </item>
+                    </layout>
+                </widget>
+            </item>
+            <item row="1" column="0" colspan="2">
+                <widget class="QWidget" name="PlayControls" native="true">
+                    <property name="sizePolicy">
+                        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                            <horstretch>1</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="autoFillBackground">
+                        <bool>false</bool>
+                    </property>
+                    <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0,0,0,0,0,0,3">
+                        <property name="sizeConstraint">
+                            <enum>QLayout::SetDefaultConstraint</enum>
+                        </property>
+                        <property name="leftMargin">
+                            <number>0</number>
+                        </property>
+                        <property name="topMargin">
+                            <number>0</number>
+                        </property>
+                        <property name="rightMargin">
+                            <number>0</number>
+                        </property>
+                        <property name="bottomMargin">
+                            <number>0</number>
+                        </property>
+                        <item>
+                            <widget class="QLineEdit" name="seekValue">
+                                <property name="sizePolicy">
+                                    <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                                        <horstretch>0</horstretch>
+                                        <verstretch>0</verstretch>
+                                    </sizepolicy>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>0</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>16777215</width>
+                                        <height>16777215</height>
+                                    </size>
+                                </property>
+                                <property name="inputMask">
+                                    <string/>
+                                </property>
+                                <property name="maxLength">
+                                    <number>30</number>
+                                </property>
+                                <property name="alignment">
+                                    <set>Qt::AlignCenter</set>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QPushButton" name="seekButton">
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>16777215</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>Seek</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <spacer name="verticalSpacer_2">
+                                <property name="orientation">
+                                    <enum>Qt::Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>QSizePolicy::Minimum</enum>
+                                </property>
+                                <property name="sizeHint" stdset="0">
+                                    <size>
+                                        <width>10</width>
+                                        <height>40</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </item>
+                        <item>
+                            <widget class="QPushButton" name="prevFrameButton">
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>16777215</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>Prev</string>
+                                </property>
+                                <property name="shortcut">
+                                    <string>Left</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QPushButton" name="playPauseButton">
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="text">
+                                    <string>Play</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QPushButton" name="nextFrameButton">
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>0</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>80</width>
+                                        <height>16777215</height>
+                                    </size>
+                                </property>
+                                <property name="text">
+                                    <string>Next</string>
+                                </property>
+                                <property name="shortcut">
+                                    <string>Right</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <widget class="QDoubleSpinBox" name="sppedFactor">
+                                <property name="toolTip">
+                                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;speed&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>Qt::AlignCenter</set>
+                                </property>
+                                <property name="buttonSymbols">
+                                    <enum>QAbstractSpinBox::PlusMinus</enum>
+                                </property>
+                                <property name="decimals">
+                                    <number>2</number>
+                                </property>
+                                <property name="minimum">
+                                    <double>0.250000000000000</double>
+                                </property>
+                                <property name="maximum">
+                                    <double>1.750000000000000</double>
+                                </property>
+                                <property name="singleStep">
+                                    <double>0.250000000000000</double>
+                                </property>
+                                <property name="value">
+                                    <double>1.000000000000000</double>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <spacer name="verticalSpacer">
+                                <property name="orientation">
+                                    <enum>Qt::Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>QSizePolicy::Minimum</enum>
+                                </property>
+                                <property name="sizeHint" stdset="0">
+                                    <size>
+                                        <width>10</width>
+                                        <height>10</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </item>
+                        <item>
+                            <widget class="QPushButton" name="resetViewButton">
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="text">
+                                    <string>Reset View</string>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <spacer name="verticalSpacer_3">
+                                <property name="orientation">
+                                    <enum>Qt::Vertical</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>QSizePolicy::Minimum</enum>
+                                </property>
+                                <property name="sizeHint" stdset="0">
+                                    <size>
+                                        <width>10</width>
+                                        <height>40</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </item>
+                        <item>
+                            <widget class="QSlider" name="seekBar">
+                                <property name="enabled">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Qt::Horizontal</enum>
+                                </property>
+                            </widget>
+                        </item>
+                    </layout>
+                </widget>
+            </item>
+            <item row="0" column="1">
+                <layout class="QVBoxLayout" name="verticalLayout_3" stretch="0,0">
+                    <property name="sizeConstraint">
+                        <enum>QLayout::SetFixedSize</enum>
+                    </property>
+                    <property name="topMargin">
+                        <number>0</number>
+                    </property>
+                    <property name="bottomMargin">
+                        <number>0</number>
+                    </property>
+                    <item>
+                        <widget class="QLabel" name="frameNumber">
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>30</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>200</width>
+                                    <height>16777215</height>
+                                </size>
+                            </property>
+                            <property name="text">
+                                <string>Frame-Number :</string>
+                            </property>
+                            <property name="alignment">
+                                <set>Qt::AlignCenter</set>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QToolBox" name="toolBox">
+                            <property name="minimumSize">
+                                <size>
+                                    <width>200</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>200</width>
+                                    <height>16777215</height>
+                                </size>
+                            </property>
+                            <property name="currentIndex">
+                                <number>1</number>
+                            </property>
+                            <property name="tabSpacing">
+                                <number>6</number>
+                            </property>
+                            <widget class="QWidget" name="page">
+                                <property name="geometry">
+                                    <rect>
+                                        <x>0</x>
+                                        <y>0</y>
+                                        <width>200</width>
+                                        <height>575</height>
+                                    </rect>
+                                </property>
+                                <attribute name="label">
+                                    <string>Annotation</string>
+                                </attribute>
+                                <layout class="QVBoxLayout" name="verticalLayout_2">
+                                    <property name="leftMargin">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="topMargin">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="rightMargin">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="bottomMargin">
+                                        <number>0</number>
+                                    </property>
+                                    <item>
+                                        <layout class="QVBoxLayout" name="verticalLayout_4" stretch="2,0,1">
+                                            <item>
+                                                <widget class="QScrollArea" name="scrollArea_2">
+                                                    <property name="widgetResizable">
+                                                        <bool>true</bool>
+                                                    </property>
+                                                    <widget class="QWidget" name="widget">
+                                                        <property name="geometry">
+                                                            <rect>
+                                                                <x>0</x>
+                                                                <y>0</y>
+                                                                <width>194</width>
+                                                                <height>367</height>
+                                                            </rect>
+                                                        </property>
+                                                        <layout class="QVBoxLayout" name="verticalLayout_7">
+                                                            <item>
+                                                                <layout class="QVBoxLayout" name="keypoint_container">
+                                                                    <property name="spacing">
+                                                                        <number>0</number>
+                                                                    </property>
+                                                                </layout>
+                                                            </item>
+                                                        </layout>
+                                                    </widget>
+                                                </widget>
+                                            </item>
+                                            <item>
+                                                <spacer name="horizontalSpacer">
+                                                    <property name="orientation">
+                                                        <enum>Qt::Horizontal</enum>
+                                                    </property>
+                                                    <property name="sizeHint" stdset="0">
+                                                        <size>
+                                                            <width>40</width>
+                                                            <height>5</height>
+                                                        </size>
+                                                    </property>
+                                                </spacer>
+                                            </item>
+                                            <item>
+                                                <widget class="QScrollArea" name="scrollArea_3">
+                                                    <property name="widgetResizable">
+                                                        <bool>true</bool>
+                                                    </property>
+                                                    <widget class="QWidget" name="scrollAreaWidgetContents_2">
+                                                        <property name="geometry">
+                                                            <rect>
+                                                                <x>0</x>
+                                                                <y>0</y>
+                                                                <width>194</width>
+                                                                <height>181</height>
+                                                            </rect>
+                                                        </property>
+                                                        <layout class="QVBoxLayout" name="verticalLayout_8">
+                                                            <item>
+                                                                <layout class="QVBoxLayout" name="behaviourList">
+                                                                    <property name="spacing">
+                                                                        <number>0</number>
+                                                                    </property>
+                                                                </layout>
+                                                            </item>
+                                                        </layout>
+                                                    </widget>
+                                                </widget>
+                                            </item>
+                                        </layout>
+                                    </item>
+                                </layout>
+                            </widget>
+                            <widget class="QWidget" name="page_2">
+                                <property name="geometry">
+                                    <rect>
+                                        <x>0</x>
+                                        <y>0</y>
+                                        <width>200</width>
+                                        <height>575</height>
+                                    </rect>
+                                </property>
+                                <attribute name="label">
+                                    <string>Interpolation</string>
+                                </attribute>
+                                <layout class="QVBoxLayout" name="verticalLayout_5" stretch="2,1">
+                                    <property name="leftMargin">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="topMargin">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="rightMargin">
+                                        <number>0</number>
+                                    </property>
+                                    <property name="bottomMargin">
+                                        <number>0</number>
+                                    </property>
+                                    <item>
+                                        <widget class="QScrollArea" name="scrollArea">
+                                            <property name="widgetResizable">
+                                                <bool>true</bool>
+                                            </property>
+                                            <widget class="QWidget" name="scrollWidget">
+                                                <property name="geometry">
+                                                    <rect>
+                                                        <x>0</x>
+                                                        <y>0</y>
+                                                        <width>196</width>
+                                                        <height>375</height>
+                                                    </rect>
+                                                </property>
+                                                <layout class="QVBoxLayout" name="verticalLayout_6">
+                                                    <property name="leftMargin">
+                                                        <number>0</number>
+                                                    </property>
+                                                    <property name="topMargin">
+                                                        <number>0</number>
+                                                    </property>
+                                                    <property name="rightMargin">
+                                                        <number>0</number>
+                                                    </property>
+                                                    <property name="bottomMargin">
+                                                        <number>0</number>
+                                                    </property>
+                                                    <item>
+                                                        <layout class="QVBoxLayout" name="interpolationList"/>
+                                                    </item>
+                                                </layout>
+                                            </widget>
+                                        </widget>
+                                    </item>
+                                    <item>
+                                        <layout class="QGridLayout" name="gridLayout_2">
+                                            <item row="3" column="0" colspan="2">
+                                                <widget class="QPushButton" name="interpolateButton">
+                                                    <property name="text">
+                                                        <string>Interpolate</string>
+                                                    </property>
+                                                </widget>
+                                            </item>
+                                            <item row="1" column="0">
+                                                <widget class="QLabel" name="label">
+                                                    <property name="text">
+                                                        <string>Initial Index</string>
+                                                    </property>
+                                                    <property name="alignment">
+                                                        <set>Qt::AlignCenter</set>
+                                                    </property>
+                                                </widget>
+                                            </item>
+                                            <item row="1" column="1">
+                                                <widget class="QLabel" name="interpInitialIndex">
+                                                    <property name="text">
+                                                        <string>0</string>
+                                                    </property>
+                                                    <property name="alignment">
+                                                        <set>Qt::AlignCenter</set>
+                                                    </property>
+                                                </widget>
+                                            </item>
+                                            <item row="0" column="0">
+                                                <widget class="QPushButton" name="interpSelectAllButton">
+                                                    <property name="text">
+                                                        <string>Select All</string>
+                                                    </property>
+                                                </widget>
+                                            </item>
+                                            <item row="0" column="1">
+                                                <widget class="QPushButton" name="interpClearAllButton">
+                                                    <property name="text">
+                                                        <string>Clear All</string>
+                                                    </property>
+                                                </widget>
+                                            </item>
+                                            <item row="2" column="0">
+                                                <widget class="QPushButton" name="interpSetCurrentIndex">
+                                                    <property name="text">
+                                                        <string>Update Index</string>
+                                                    </property>
+                                                </widget>
+                                            </item>
+                                            <item row="2" column="1">
+                                                <widget class="QPushButton" name="interpSeekIndex">
+                                                    <property name="text">
+                                                        <string>Seek Index</string>
+                                                    </property>
+                                                </widget>
+                                            </item>
+                                        </layout>
+                                    </item>
+                                </layout>
+                            </widget>
+                        </widget>
+                    </item>
                 </layout>
-               </item>
-              </layout>
-             </widget>
-            </widget>
-           </item>
-           <item>
-            <spacer name="horizontalSpacer">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>5</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
-            <widget class="QScrollArea" name="scrollArea_3">
-             <property name="widgetResizable">
-              <bool>true</bool>
-             </property>
-             <widget class="QWidget" name="scrollAreaWidgetContents_2">
-              <property name="geometry">
-               <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>194</width>
-                <height>181</height>
-               </rect>
-              </property>
-              <layout class="QVBoxLayout" name="verticalLayout_8">
-               <item>
-                <layout class="QVBoxLayout" name="behaviourList">
-                 <property name="spacing">
-                  <number>0</number>
-                 </property>
-                </layout>
-               </item>
-              </layout>
-             </widget>
-            </widget>
-           </item>
-          </layout>
-         </item>
+            </item>
         </layout>
-       </widget>
-       <widget class="QWidget" name="page_2">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>200</width>
-          <height>575</height>
-         </rect>
-        </property>
-        <attribute name="label">
-         <string>Interpolation</string>
-        </attribute>
-        <layout class="QVBoxLayout" name="verticalLayout_5" stretch="2,1">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item>
-          <widget class="QScrollArea" name="scrollArea">
-           <property name="widgetResizable">
-            <bool>true</bool>
-           </property>
-           <widget class="QWidget" name="scrollWidget">
-            <property name="geometry">
-             <rect>
-              <x>0</x>
-              <y>0</y>
-              <width>196</width>
-              <height>375</height>
-             </rect>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_6">
-             <property name="leftMargin">
-              <number>0</number>
-             </property>
-             <property name="topMargin">
-              <number>0</number>
-             </property>
-             <property name="rightMargin">
-              <number>0</number>
-             </property>
-             <property name="bottomMargin">
-              <number>0</number>
-             </property>
-             <item>
-              <layout class="QVBoxLayout" name="interpolationList"/>
-             </item>
-            </layout>
-           </widget>
-          </widget>
-         </item>
-         <item>
-          <layout class="QGridLayout" name="gridLayout_2">
-           <item row="3" column="0" colspan="2">
-            <widget class="QPushButton" name="interpolateButton">
-             <property name="text">
-              <string>Interpolate</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label">
-             <property name="text">
-              <string>Initial Index</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLabel" name="interpInitialIndex">
-             <property name="text">
-              <string>0</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QPushButton" name="interpSelectAllButton">
-             <property name="text">
-              <string>Select All</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QPushButton" name="interpClearAllButton">
-             <property name="text">
-              <string>Clear All</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QPushButton" name="interpSetCurrentIndex">
-             <property name="text">
-              <string>Update Index</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QPushButton" name="interpSeekIndex">
-             <property name="text">
-              <string>Seek Index</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="0" colspan="2">
-    <widget class="QWidget" name="PlayControls" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-       <horstretch>1</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="autoFillBackground">
-      <bool>false</bool>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,0,0,0,0,0,0,0,0,3">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetDefaultConstraint</enum>
-      </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QLineEdit" name="seekValue">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="inputMask">
-         <string/>
-        </property>
-        <property name="maxLength">
-         <number>30</number>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="seekButton">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Seek</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Minimum</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>10</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="prevFrameButton">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Prev</string>
-        </property>
-        <property name="shortcut">
-         <string>Left</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="playPauseButton">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="text">
-         <string>Play</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="nextFrameButton">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>80</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>80</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Next</string>
-        </property>
-        <property name="shortcut">
-         <string>Right</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Minimum</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>10</width>
-          <height>10</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="resetViewButton">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="text">
-         <string>Reset View</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="verticalSpacer_3">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Minimum</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>10</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QSlider" name="seekBar">
-        <property name="enabled">
-         <bool>true</bool>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-       </widget>
-      </item>
-     </layout>
     </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QWidget" name="view_widget" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>1</horstretch>
-       <verstretch>1</verstretch>
-      </sizepolicy>
-     </property>
-     <layout class="QVBoxLayout" name="verticalLayout_10">
-      <item>
-       <layout class="QVBoxLayout" name="view_container"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
-  </layout>
- </widget>
- <resources/>
- <connections/>
+    <resources/>
+    <connections/>
 </ui>
