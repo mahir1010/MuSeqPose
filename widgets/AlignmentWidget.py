@@ -2,6 +2,7 @@ from PySide2.QtCore import QFile, QObject
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QWidget, QDialog, QVBoxLayout
 
+from config import MuSeqPoseConfig
 from ui_Skeleton import Marker
 from utils.SessionFileManager import SessionFileManager
 from widgets.ImageViewer import AnnotationImageViewer
@@ -15,7 +16,7 @@ class AlignmentDialog(QDialog):
     ]
     KEYS = ['origin', 'x_max', 'y_max']
 
-    def __init__(self, parent, config, session_manager: SessionFileManager):
+    def __init__(self, parent, config:MuSeqPoseConfig, session_manager: SessionFileManager):
         super(AlignmentDialog, self).__init__(parent)
         self.frame_number = 0
         self.config = config
@@ -30,7 +31,7 @@ class AlignmentDialog(QDialog):
         self.ui.clear_btn.clicked.connect(self.clear_data)
         self.ui.exit_btn.clicked.connect(self.close)
         self.max_frames = 0
-        for index, view in enumerate(config['views']):
+        for index, view in enumerate(config.views):
             widget = AnnotationImageViewer()
             widget.draw_frame(session_manager.session_video_readers[view].random_access_image(self.frame_number))
             if index==0:
@@ -40,7 +41,7 @@ class AlignmentDialog(QDialog):
             self.markers[view] = []
             self.views.append(view)
             for i in range(3):
-                x, y = self.config['views'][view].get('axes', {}).get(self.KEYS[i], [-4, -4])
+                x, y = self.config.views[view].axes.get(self.KEYS[i], [-4, -4])
                 self.markers[view].append(Marker(i, 0, 0, 4, 4, color=self.COLORS[i]))
                 self.markers[view][-1].setVisible(True)
                 widget.scene.addItem(self.markers[view][-1])
@@ -64,17 +65,15 @@ class AlignmentDialog(QDialog):
         marker.setX(pos.x() - 2)
         marker.setY(pos.y() - 2)
         marker.update()
-        if 'axes' not in self.config['views'][self.views[index]]:
-            self.config[self.views[index]]['axes'] = {}
-        self.config['views'][self.views[index]]['axes'][self.KEYS[selected]] = [int(pos.x()), int(pos.y())]
+        self.config.views[self.views[index]].axes[self.KEYS[selected]] = [int(pos.x()), int(pos.y())]
 
     def change_keypoint(self, pos, _):
         self.radio_map[pos].setChecked(True)
 
     def clear_data(self, event=None):
         index = self.ui.view_container.currentIndex()
-        if 'axes' in self.config['views'][self.views[index]]:
-            del self.config['views'][self.views[index]]['axes']
+        self.config.views[self.views[index]].axes={}
+
 
     def change_frame(self,frame_number):
         self.frame_number = min(max(frame_number,0),self.max_frames)

@@ -1,6 +1,8 @@
 from PySide2.QtCore import QTimer, Signal
 from PySide2.QtWidgets import QVBoxLayout, QButtonGroup, QCheckBox, QMessageBox
 
+from config import MuSeqPoseConfig
+from player_interface import VideoPlayer
 from ui_Skeleton import SkeletonController
 from widgets.ImageViewer import AnnotationImageViewer
 from widgets.PlayControlWidget import PlayControlWidget
@@ -13,14 +15,13 @@ class AnnotationWidget(PlayControlWidget):
     def update_frame_number(self):
         self.frame_number = self.video_player.frame_number
 
-    def __init__(self, view_name, config, ui_file, video_player, threshold=0.6, parent=None):
+    def __init__(self, view_name:str, config:MuSeqPoseConfig, ui_file, video_player:VideoPlayer, threshold=0.6, parent=None):
         super(AnnotationWidget, self).__init__(config, ui_file, threshold, parent)
         self.view_name = view_name
         self.video_player = video_player
         layout = QVBoxLayout()
         layout.addWidget(self.ui)
-        self.reprojection_toolbox_enabled = self.config['reprojection_toolbox']
-        self.ui.reprojectionToolBox.setVisible(self.reprojection_toolbox_enabled)
+        self.ui.reprojectionToolBox.setVisible(self.config.reprojection_toolbox_enabled)
         self.setLayout(layout)
         self.annotation_button_group = QButtonGroup()
         self.visibility_button_group = QButtonGroup()
@@ -42,11 +43,11 @@ class AnnotationWidget(PlayControlWidget):
         self.image_viewer.delete_keypoint.connect(self.set_keypoint_likelihood)
         self.ui.view_container.addWidget(self.image_viewer)
 
-        self.interp_initial_index_set = set(self.config['body_parts'])
+        self.interp_initial_index_set = set(self.config.body_parts)
         self.interp_candidate_set = set()
         self.interp_initial_index_frame = 0
         self.ui.interpSetCurrentIndex.clicked.connect(self.interp_update_initial_index_set)
-        for idx, (name, color) in enumerate(zip(self.config['body_parts'], self.config['colors'])):
+        for idx, (name, color) in enumerate(zip(self.config.body_parts, self.config.colors)):
             kp_ui = KeyPointController(idx, name, color)
             self.keypoint_list.append(kp_ui)
             self.ui.keypoint_container.addWidget(kp_ui)
@@ -55,18 +56,17 @@ class AnnotationWidget(PlayControlWidget):
             btn = QCheckBox(name)
             self.interp_button_group.addButton(btn, idx)
             self.ui.interpolationList.addWidget(btn)
-            if self.reprojection_toolbox_enabled:
+            if self.config.reprojection_toolbox_enabled:
                 reprojection_btn = QCheckBox(name)
                 self.reprojection_parts_button_group.addButton(reprojection_btn, idx)
                 self.ui.reprojKeypointList.addWidget(reprojection_btn)
-        if self.reprojection_toolbox_enabled:
+        if self.config.reprojection_toolbox_enabled:
             self.ui.reprojectButton.clicked.connect(self.reproject_parts)
-            for idx, view in enumerate(self.config['views']):
+            for idx, view in enumerate(self.config.annotation_views):
                 reprojection_btn = QCheckBox(view)
                 self.reprojection_views_button_group.addButton(reprojection_btn, idx)
                 self.ui.viewList.addWidget(reprojection_btn)
-
-        for idx, behaviour in enumerate(self.config['behaviours']):
+        for idx, behaviour in enumerate(self.config.behaviours):
             btn = QCheckBox(behaviour)
             self.behaviour_button_group.addButton(btn, id=idx)
             self.ui.behaviourList.addWidget(btn)
@@ -106,7 +106,7 @@ class AnnotationWidget(PlayControlWidget):
         if state:
             self.current_keypoint = self.keypoint_list[id]
             self.ui.scrollArea_2.ensureWidgetVisible(self.current_keypoint)
-        self.video_player.data_point_drawer.mark_selected(self.config['body_parts'][id], state)
+        self.video_player.data_point_drawer.mark_selected(self.config.body_parts[id], state)
 
     def render_next_frame(self, redraw=None):
         if type(redraw) == bool and redraw:
@@ -122,7 +122,7 @@ class AnnotationWidget(PlayControlWidget):
         self.ui.seekBar.blockSignals(False)
 
     def update_annotation_ui(self, skeleton):
-        for idx, part in enumerate(self.config['body_parts']):
+        for idx, part in enumerate(self.config.body_parts):
             self.keypoint_list[idx].visibility_checkbox.blockSignals(True)
             if skeleton[part] >= self.threshold:
                 self.keypoint_list[idx].visibility_checkbox.setChecked(True)
@@ -131,9 +131,9 @@ class AnnotationWidget(PlayControlWidget):
             self.keypoint_list[idx].visibility_checkbox.blockSignals(False)
             self.keypoint_list[idx].first_click = True
         self.behaviour_button_group.blockSignals(True)
-        if self.video_player.data_point.behaviour not in self.config['behaviours']:
+        if self.video_player.data_point.behaviour not in self.config.behaviours:
             self.set_behaviour(self.behaviour_button_group.checkedId())
-        self.behaviour_button_group.buttons()[self.config['behaviours'].index(skeleton.behaviour)].setChecked(True)
+        self.behaviour_button_group.buttons()[self.config.behaviours.index(skeleton.behaviour)].setChecked(True)
         self.behaviour_button_group.blockSignals(False)
         self.interp_update_candidates()
 
@@ -165,17 +165,17 @@ class AnnotationWidget(PlayControlWidget):
         self.image_viewer.draw_skeleton(self.video_player.data_point_drawer)
 
     def set_behaviour(self, id):
-        self.video_player.data_point.behaviour = self.config['behaviours'][id]
+        self.video_player.data_point.behaviour = self.config.behaviours[id]
 
     def interp_update_candidates(self):
-        for idx, name in enumerate(self.config['body_parts']):
+        for idx, name in enumerate(self.config.body_parts):
             if name in self.interp_initial_index_set and self.keypoint_list[idx].visibility_checkbox.isChecked():
                 self.interp_button_group.button(idx).setChecked(True)
             else:
                 self.interp_button_group.button(idx).setChecked(False)
 
     def interp_set_candidate(self, id, state):
-        name = self.config['body_parts'][id]
+        name = self.config.body_parts[id]
         self.interp_button_group.blockSignals(True)
         if self.frame_number == self.interp_initial_index_frame:
             if state and self.keypoint_list[id].visibility_checkbox.isChecked():

@@ -4,6 +4,8 @@ from PySide2.QtCore import QFile, QTimer, Signal
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QWidget
 
+from config import MuSeqPoseConfig
+
 
 class MetaClass(type(QWidget), type(ABC)):
     pass
@@ -12,7 +14,7 @@ class MetaClass(type(QWidget), type(ABC)):
 class PlayControlWidget(QWidget, ABC, metaclass=MetaClass):
     update_status = Signal(str)
 
-    def __init__(self, config, ui_file, threshold=0.6, parent=None):
+    def __init__(self, config:MuSeqPoseConfig, ui_file, threshold=0.6, parent=None):
         super(PlayControlWidget, self).__init__(parent)
         self.config = config
         self.threshold = threshold

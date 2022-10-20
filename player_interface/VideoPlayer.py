@@ -1,16 +1,19 @@
 from OptiPose.data_store_interface import initialize_datastore_reader
 from OptiPose.video_reader_interface import initialize_video_reader
+from config import AnnotationConfig, MuSeqPoseConfig
 from player_interface.PlayerInterface import PlayerInterface
 
 
 class VideoPlayer(PlayerInterface):
 
-    def __init__(self, config, view_data):
+    def release(self):
+        self.video_reader.release()
+
+    def __init__(self, config: MuSeqPoseConfig, view_data: AnnotationConfig):
         super(VideoPlayer, self).__init__(config, view_data)
-        self.video_reader = initialize_video_reader(view_data['video_file'], int(view_data['framerate']),
-                                                    view_data['video_reader'])
-        self.data_store = initialize_datastore_reader(self.config['body_parts'], view_data['annotation_file'],
-                                                      view_data['annotation_file_flavor'])
+        self.video_reader = initialize_video_reader(view_data.video_file, config.framerate, view_data.video_reader)
+        self.data_store = initialize_datastore_reader(config.body_parts, view_data.annotation_file,
+                                                      view_data.annotation_file_flavor)
         self.current_frame = None
 
     def render_next_frame(self, image_viewer):
@@ -22,8 +25,7 @@ class VideoPlayer(PlayerInterface):
                 previous_behaviour = self.data_point.behaviour
             self.frame_number = self.video_reader.get_current_index()
             self.data_point = self.data_store.get_skeleton(self.frame_number)
-            self.data_point.behaviour = previous_behaviour if self.data_point.behaviour not in self.config[
-                'behaviours'] else self.data_point.behaviour
+            self.data_point.behaviour = previous_behaviour if self.data_point.behaviour not in self.config.behaviours else self.data_point.behaviour
             image_viewer.draw_frame(frame)
             self.current_frame = frame
         return self.frame_number

@@ -84,13 +84,6 @@
           </property>
          </widget>
         </item>
-        <item row="6" column="1" colspan="2">
-         <widget class="QPushButton" name="axes_annotation_btn">
-          <property name="text">
-           <string>Axes Annotations</string>
-          </property>
-         </widget>
-        </item>
         <item row="8" column="3">
          <widget class="QLineEdit" name="recon_scale">
           <property name="alignment">
@@ -138,13 +131,6 @@
           </property>
          </spacer>
         </item>
-        <item row="6" column="3" colspan="2">
-         <widget class="QPushButton" name="alignment_matrix_btn">
-          <property name="text">
-           <string>Alignment Matrices</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="0" colspan="3" alignment="Qt::AlignRight">
          <widget class="QRadioButton" name="custom_file_btn">
           <property name="layoutDirection">
@@ -179,13 +165,6 @@
          <widget class="QLabel" name="label_8">
           <property name="text">
            <string>Select Views</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0">
-         <widget class="QLabel" name="label_9">
-          <property name="text">
-           <string>Generate</string>
           </property>
          </widget>
         </item>
@@ -239,6 +218,30 @@
         <item row="2" column="1" colspan="4">
          <layout class="QHBoxLayout" name="file_loader_container"/>
         </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>Generate</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="4">
+         <widget class="QPushButton" name="alignment_matrix_btn">
+          <property name="text">
+           <string>Alignment Matrices</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="3">
+         <widget class="QPushButton" name="axes_annotation_btn">
+          <property name="text">
+           <string>Axes Annotations</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1" colspan="2">
+         <layout class="QHBoxLayout" name="alignment_view_list"/>
+        </item>
        </layout>
       </widget>
      </item>
@@ -257,7 +260,7 @@
            <enum>QTabWidget::Rounded</enum>
           </property>
           <property name="currentIndex">
-           <number>2</number>
+           <number>3</number>
           </property>
           <widget class="QWidget" name="distance_filter">
            <property name="sizePolicy">
@@ -684,8 +687,6 @@ p, li { white-space: pre-wrap; }
  <tabstops>
   <tabstop>custom_file_btn</tabstop>
   <tabstop>reconstruction_btn</tabstop>
-  <tabstop>axes_annotation_btn</tabstop>
-  <tabstop>alignment_matrix_btn</tabstop>
   <tabstop>recon_algorithm</tabstop>
   <tabstop>recon_scale</tabstop>
   <tabstop>recon_file_prefix</tabstop>

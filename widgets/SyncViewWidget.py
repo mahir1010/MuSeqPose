@@ -3,6 +3,7 @@ import math
 from PySide2.QtCore import QTimer
 from PySide2.QtWidgets import QVBoxLayout
 
+from config import MuSeqPoseConfig
 from player_interface.PlotPlayer import PlotPlayer
 from widgets.ImageViewer import ImageViewer
 from widgets.PlayControlWidget import PlayControlWidget
@@ -52,7 +53,7 @@ class SyncViewWidget(PlayControlWidget):
             self.ui.nextFrameButton.setEnabled(False)
             self.ui.prevFrameButton.setEnabled(False)
 
-    def __init__(self, config, ui_file, video_players, threshold=0.6, parent=None):
+    def __init__(self, config:MuSeqPoseConfig, ui_file, video_players, threshold=0.6, parent=None):
         super(SyncViewWidget, self).__init__(config, ui_file, threshold, parent)
         self.video_players = video_players
         self.image_viewers = []
@@ -68,9 +69,9 @@ class SyncViewWidget(PlayControlWidget):
             cols = len(video_players)
         idx = 0
         for r in range(rows):
-            self.ui.gridlayout.setRowMinimumHeight(r, 400)
+            self.ui.gridlayout.setRowStretch(r,1)
             for c in range(cols):
-                self.ui.gridlayout.setColumnMinimumWidth(c, 400)
+                self.ui.gridlayout.setColumnStretch(c,1)
                 if idx >= len(video_players):
                     break
                 if not isinstance(video_players[idx], (PlotPlayer,)):

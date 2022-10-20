@@ -120,10 +120,17 @@ QScrollBar::handle:vertical {
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionLoad"/>
-    <addaction name="actionSave"/>
     <addaction name="actionSave_Config"/>
    </widget>
+   <widget class="QMenu" name="menuData_Files">
+    <property name="title">
+     <string>Data Files</string>
+    </property>
+    <addaction name="actionSave"/>
+    <addaction name="actionReload_Files"/>
+   </widget>
    <addaction name="menuProject"/>
+   <addaction name="menuData_Files"/>
   </widget>
   <action name="actionNew">
    <property name="text">
@@ -155,6 +162,11 @@ QScrollBar::handle:vertical {
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+S</string>
+   </property>
+  </action>
+  <action name="actionReload_Files">
+   <property name="text">
+    <string>Reload Data</string>
    </property>
   </action>
  </widget>

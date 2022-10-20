@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 
+from config import MuSeqPoseConfig
+
 
 class PlayerInterface(ABC):
 
-    def __init__(self, config, view_data):
+    def __init__(self, config:MuSeqPoseConfig, view_data):
         self.config = config
         self.view_data = view_data
         self.data_store = None
@@ -25,4 +27,8 @@ class PlayerInterface(ABC):
 
     @abstractmethod
     def get_number_of_frames(self):
+        pass
+
+    @abstractmethod
+    def release(self):
         pass

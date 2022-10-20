@@ -7,6 +7,7 @@ from vispy.scene.visuals import LinePlot, Box
 from vispy.visuals.transforms import STTransform
 
 from OptiPose.data_store_interface import initialize_datastore_reader
+from config import PlotConfig, MuSeqPoseConfig, ReconstructionPlotConfig
 from player_interface.PlayerInterface import PlayerInterface
 
 
@@ -18,13 +19,13 @@ def get_visual(data):
         visual = XYZAxis()
     elif data['type'] == "Plane":
         visual = Plane(color=data.get('color', (0.8, 0, 0)), width=data.get('width', 1), height=data.get('height', 1))
-        translate = data.get('translate', translate)
+        translate = data.get('translate', translate).copy()
         translate[0] += data.get('width', 1) / 2
         translate[1] += data.get('height', 1) / 2
     elif data['type'] == "Box":
         visual = Box(width=data.get('width', 1), height=data.get('height', 1), depth=data.get('depth', 1),
                      color=data.get('color', (0.8, 0, 0)))
-        translate = data.get('translate', translate)
+        translate = data.get('translate', translate).copy()
         translate[0] += data.get('width', 1) / 2
         translate[1] += data.get('depth', 1) / 2
         translate[2] += data.get('height', 1) / 2
@@ -34,7 +35,6 @@ def get_visual(data):
 
 
 class PlotPlayer(PlayerInterface, ABC):
-
     def render_previous_frame(self):
         self.frame_number = max(0, self.frame_number - 1)
 
@@ -44,11 +44,11 @@ class PlotPlayer(PlayerInterface, ABC):
     def get_number_of_frames(self):
         return len(self.data_store)
 
-    def __init__(self, config, view_data):
+    def __init__(self, config:MuSeqPoseConfig, view_data:PlotConfig):
         super(PlotPlayer, self).__init__(config, view_data)
-        columns = view_data['annotation_columns']
-        path = os.path.join(config['output_folder'], view_data['annotation_file'])
-        self.data_store = initialize_datastore_reader(columns, path, view_data['annotation_file_flavor'])
+        columns = view_data.annotation_columns
+        path = os.path.join(config.output_folder, view_data.annotation_file)
+        self.data_store = initialize_datastore_reader(columns, path, view_data.annotation_file_flavor)
         self.scene_canvas = None
 
     def get_widget(self):
@@ -56,13 +56,16 @@ class PlotPlayer(PlayerInterface, ABC):
 
 
 class ReconstructionPlayer(PlotPlayer):
+    def release(self):
+        if self.scene_canvas is not None:
+            self.scene_canvas.close()
 
-    def __init__(self, config, view_data):
+    def __init__(self, config:MuSeqPoseConfig, view_data:ReconstructionPlotConfig):
         super(ReconstructionPlayer, self).__init__(config, view_data)
-        size = view_data.get('size', (500, 500))
-        self.max_limits = np.array(view_data.get('normalization_max_limit', [1000, 1000, 1000]))
-        self.min_limits = np.array(view_data.get('normalization_min_limit', [0, 0, 0]))
-        self.threshold = self.config['threshold']
+        size = view_data.size
+        self.max_limits = view_data.normalization_max_limit
+        self.min_limits = view_data.normalization_min_limit
+        self.threshold = self.config.threshold
         self.scene_canvas = SceneCanvas(size=size)
         self.scene_canvas.unfreeze()
         view = self.scene_canvas.central_widget.add_view()
@@ -70,19 +73,11 @@ class ReconstructionPlayer(PlotPlayer):
         view.camera.center = (0.5, 0.5, 0)
         self.markers = {}
         self.lines = []
-        self.line = LinePlot(np.zeros((len(self.config['body_parts']), 3)), width=2, color='red', parent=view.scene,
+        self.line = LinePlot(np.zeros((self.config.num_parts, 3)), width=2, color='red', parent=view.scene,
                              connect=np.array([[0, 1]]), marker_size=4)
         self.scene_canvas.freeze()
-        for item in view_data['environment'].values():
+        for item in view_data.environment.values():
             view.add(get_visual(item))
-        # plane = Plane(color=(0.3, 0.3, 0.3))
-        # plane.transform = STTransform(translate=(0.5, 0.5, -0.01))
-        # view.add(plane)
-        # box = Box(width=0.06, height=0.247, depth=0.06)
-        # box.transform = STTransform(translate=(0.65, 0.8, 0.12))
-        # view.add(box)
-        # view.add(XYZAxis(parent=view.scene, antialias=True))
-
         self.scene_canvas.create_native()
 
     def render_next_frame(self, image_viewer):
@@ -91,7 +86,7 @@ class ReconstructionPlayer(PlotPlayer):
         points = [skeleton[p] for p in skeleton.body_parts_map.keys() if skeleton[p] >= self.threshold]
         point_map = {p.name: i for i, p in enumerate(points)}
         connections = []
-        for idx, end_points in enumerate(self.config['skeleton']):
+        for idx, end_points in enumerate(self.config.skeleton):
             if skeleton[end_points[0]] >= self.threshold and skeleton[end_points[1]] >= self.threshold:
                 connection = [point_map[end_points[0]], point_map[end_points[1]]]
                 connections.append(connection)

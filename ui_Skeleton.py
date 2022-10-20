@@ -3,6 +3,7 @@ from PySide2.QtGui import Qt, QColor, QBrush, QPen
 from PySide2.QtWidgets import QGraphicsLineItem, QGraphicsEllipseItem, QGraphicsItem
 
 from OptiPose.skeleton import Skeleton
+from config import MuSeqPoseConfig
 
 
 class Marker(QGraphicsEllipseItem):
@@ -22,27 +23,24 @@ class Marker(QGraphicsEllipseItem):
 
 class SkeletonController():
 
-    def __init__(self, config, threshold=0.6, marker_size=4):
+    def __init__(self, config:MuSeqPoseConfig, threshold=0.6, marker_size=4):
         self.markers = {}
         self.lines = []
         self.threshold = threshold
         self.config = config
         self.marker_size = marker_size
         self.marker_offset = marker_size // 2
-        # self.itemGroup = QGraphicsItemGroup()
         pen = QPen(Qt.white, 1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)
         self.selected_marker = None
-        for lines in self.config['skeleton']:
+        for lines in self.config.skeleton:
             self.lines.append(QGraphicsLineItem(0, 0, 1, 1))
-            # self.itemGroup.addToGroup(self.lines[-1])
             self.lines[-1].setPen(pen)
-        for idx, (name, color) in enumerate(zip(self.config['body_parts'], self.config['colors'])):
+        for idx, (name, color) in enumerate(zip(self.config.body_parts, self.config.colors)):
             marker = Marker(idx, 0, 0, self.marker_size, self.marker_size, color)
             self.markers[name] = marker
-            # self.itemGroup.addToGroup(marker)
 
     def update_skeleton(self, skeleton: Skeleton):
-        for i, part in enumerate(self.config['body_parts']):
+        for i, part in enumerate(self.config.body_parts):
             if skeleton[part] >= self.threshold:
                 self.markers[part].setVisible(True)
                 self.markers[part].setX(skeleton[part][0] - self.marker_offset)
@@ -53,7 +51,7 @@ class SkeletonController():
                 self.markers[part].setVisible(False)
             self.markers[part].update()
 
-        for line, end_points in zip(self.lines, self.config['skeleton']):
+        for line, end_points in zip(self.lines, self.config.skeleton):
             if all([self.markers[point].isVisible() for point in end_points]):
                 p1 = skeleton[end_points[0]]
                 p2 = skeleton[end_points[1]]
