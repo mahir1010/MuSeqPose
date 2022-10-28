@@ -2,12 +2,16 @@ import os
 from abc import ABC
 
 import numpy as np
+from PySide2.QtWidgets import QSizePolicy
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
+from matplotlib.figure import Figure
 from vispy.scene import SceneCanvas, cameras, XYZAxis, Plane
 from vispy.scene.visuals import LinePlot, Box
 from vispy.visuals.transforms import STTransform
 
 from OptiPose.data_store_interface import initialize_datastore_reader
-from config import PlotConfig, MuSeqPoseConfig, ReconstructionPlotConfig
+from OptiPose.utils import unit_spherical_coordinates
+from config import PlotConfig, MuSeqPoseConfig, ReconstructionPlotConfig, LinePlotConfig
 from player_interface.PlayerInterface import PlayerInterface
 
 
@@ -35,6 +39,10 @@ def get_visual(data):
 
 
 class PlotPlayer(PlayerInterface, ABC):
+    def release(self):
+        if self.scene_canvas is not None:
+            self.scene_canvas.close()
+
     def render_previous_frame(self):
         self.frame_number = max(0, self.frame_number - 1)
 
@@ -44,9 +52,9 @@ class PlotPlayer(PlayerInterface, ABC):
     def get_number_of_frames(self):
         return len(self.data_store)
 
-    def __init__(self, config:MuSeqPoseConfig, view_data:PlotConfig):
+    def __init__(self, config: MuSeqPoseConfig, view_data: PlotConfig):
         super(PlotPlayer, self).__init__(config, view_data)
-        columns = view_data.annotation_columns
+        columns = view_data.annotation_columns if view_data.annotation_columns is not None else config.body_parts
         path = os.path.join(config.output_folder, view_data.annotation_file)
         self.data_store = initialize_datastore_reader(columns, path, view_data.annotation_file_flavor)
         self.scene_canvas = None
@@ -55,12 +63,51 @@ class PlotPlayer(PlayerInterface, ABC):
         return self.scene_canvas.native
 
 
-class ReconstructionPlayer(PlotPlayer):
-    def release(self):
-        if self.scene_canvas is not None:
-            self.scene_canvas.close()
+class LinePlotPlayer(PlotPlayer):
+    def get_widget(self):
+        return self.scene_canvas
 
-    def __init__(self, config:MuSeqPoseConfig, view_data:ReconstructionPlotConfig):
+    def seek(self, frame_number):
+        super(LinePlotPlayer, self).seek(frame_number)
+        for key in self.data:
+            self.data[key].clear()
+        self.axis.set_xlim((self.frame_number, self.frame_number + self.x_width))
+
+    def __init__(self, config: MuSeqPoseConfig, view_data: LinePlotConfig):
+        super(LinePlotPlayer, self).__init__(config, view_data)
+        size = view_data.size
+        self.scene_canvas = FigureCanvasQTAgg(Figure())
+        self.scene_canvas.setFixedSize(*size)
+        self.axis = self.scene_canvas.figure.subplots()
+        self.x_width = view_data.normalization_max_limit[0] - view_data.normalization_min_limit[0]
+        self.axis.set_ylim([view_data.normalization_min_limit[1], view_data.normalization_max_limit[1]])
+        self.data = {}
+        self.line_objects = {}
+        for line in self.view_data.lines.values():
+            self.data[line['data']] = []
+            self.line_objects[line['data']], = self.axis.plot(range(0, self.x_width), [0] * self.x_width,
+                                                             color=line['color'],label=line['legend'])
+        self.scene_canvas.figure.legend()
+
+    def render_next_frame(self, image_viewer):
+        skeleton = self.data_store.get_skeleton(self.frame_number)
+        self.frame_number += 1
+        resize_x = False
+        for key in self.data:
+            self.data[key].append(unit_spherical_coordinates(skeleton[key])[0])
+            if len(self.data[key]) > self.x_width:
+                self.data[key].pop(0)
+                resize_x = True
+            self.line_objects[key].set_data(list(range(self.frame_number - len(self.data[key]), self.frame_number)),
+                                            self.data[key])
+        if resize_x:
+            self.axis.set_xlim(self.frame_number+1-self.x_width,self.frame_number+1)
+        self.scene_canvas.figure.canvas.draw()
+
+
+class ReconstructionPlayer(PlotPlayer):
+
+    def __init__(self, config: MuSeqPoseConfig, view_data: ReconstructionPlotConfig):
         super(ReconstructionPlayer, self).__init__(config, view_data)
         size = view_data.size
         self.max_limits = view_data.normalization_max_limit
@@ -79,6 +126,7 @@ class ReconstructionPlayer(PlotPlayer):
         for item in view_data.environment.values():
             view.add(get_visual(item))
         self.scene_canvas.create_native()
+        self.scene_canvas.native.setFixedSize(*size)
 
     def render_next_frame(self, image_viewer):
         skeleton = self.data_store.get_skeleton(self.frame_number).normalize(self.max_limits, self.min_limits)

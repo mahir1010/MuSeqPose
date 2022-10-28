@@ -2,7 +2,6 @@ import os
 import sys
 from random import randint
 
-import yaml as yml
 from PySide2.QtCore import QFile, QCoreApplication, Qt
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QApplication, QFileDialog
@@ -11,7 +10,7 @@ import OptiPose.DLT as DLT
 from OptiPose import save_config
 from config import MuSeqPoseConfig
 from player_interface import VideoPlayer
-from player_interface.PlotPlayer import ReconstructionPlayer
+from player_interface.PlotPlayer import ReconstructionPlayer, LinePlotPlayer
 from utils.SessionFileManager import SessionFileManager
 from widgets.AnnotationWidget import AnnotationWidget
 from widgets.OptiPosePipeline import OptiPoseWidget
@@ -72,7 +71,7 @@ class MuSeqAnnotator(QApplication):
         self.ui.setWindowTitle(f'MuSeq Pose Kit : {self.config.project_name}')
         while len(self.config.colors) < self.config.num_parts:
             self.config.colors.append([randint(0, 255) for i in range(3)])
-        for view in self.config.views:
+        for view in self.config.annotation_views:
             video_player = VideoPlayer(self.config, self.config.annotation_views[view])
             self.session_manager.register_data_reader(view, video_player.data_store)
             self.session_manager.register_video_reader(view, video_player.video_reader)
@@ -85,13 +84,17 @@ class MuSeqAnnotator(QApplication):
             play_controller.reproject.connect(self.reproject)
             self.ui.viewTabWidget.addTab(play_controller, view)
         for plot in self.config.plots:
-            self.players[plot] = ReconstructionPlayer(self.config, self.config.plots[plot])
-        sync_controller = SyncViewWidget(self.config, os.path.join('Resources', 'SyncViewPlayer.ui'),
-                                         [player for view, player in self.players.items() if
-                                          view in self.config.sync_views])
-        sync_controller.update_status.connect(self.update_status_bar)
-        self.views.append(sync_controller)
-        self.ui.viewTabWidget.addTab(sync_controller, "sync")
+            if self.config.plots[plot].type == "Reconstruction":
+                self.players[plot] = ReconstructionPlayer(self.config, self.config.plots[plot])
+            else:
+                self.players[plot] = LinePlotPlayer(self.config, self.config.plots[plot])
+        if len(self.config.sync_views)>0:
+            sync_controller = SyncViewWidget(self.config, os.path.join('Resources', 'SyncViewPlayer.ui'),
+                                             [player for view, player in self.players.items() if
+                                              view in self.config.sync_views])
+            sync_controller.update_status.connect(self.update_status_bar)
+            self.views.append(sync_controller)
+            self.ui.viewTabWidget.addTab(sync_controller, "sync")
         widget = OptiPoseWidget(self.config, self.session_manager)
         self.views.append(widget)
         self.ui.viewTabWidget.addTab(widget, "OptiPose")

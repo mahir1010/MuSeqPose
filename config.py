@@ -10,7 +10,9 @@ class PlotConfig:
         self.is_static = data_dictionary['static']
         self.annotation_file = data_dictionary['annotation_file']
         self.annotation_file_flavor = data_dictionary['annotation_file_flavor']
-        self.annotation_columns = data_dictionary['annotation_columns']
+        self.annotation_columns = data_dictionary.get('annotation_columns', None)
+        self.normalization_max_limit = data_dictionary['normalization_max_limit']
+        self.normalization_min_limit = data_dictionary['normalization_min_limit']
 
     def export_dict(self):
         return {
@@ -19,22 +21,31 @@ class PlotConfig:
             'static': self.is_static,
             'annotation_file': self.annotation_file,
             'annotation_file_flavor': self.annotation_file_flavor,
-            'annotation_columns': self.annotation_columns
+            'annotation_columns': self.annotation_columns,
+            'normalization_max_limit': self.normalization_max_limit,
+            'normalization_min_limit': self.normalization_min_limit,
         }
+
+
+class LinePlotConfig(PlotConfig):
+    def __init__(self, data_dictionary):
+        super(LinePlotConfig, self).__init__(data_dictionary)
+        self.lines = data_dictionary['lines']
+
+    def export_dict(self):
+        data_dictionary = super(LinePlotConfig, self).export_dict()
+        data_dictionary['lines'] = self.lines
+        return data_dictionary
 
 
 class ReconstructionPlotConfig(PlotConfig):
     def __init__(self, data_dictionary):
         super(ReconstructionPlotConfig, self).__init__(data_dictionary)
-        self.normalization_max_limit = data_dictionary['normalization_max_limit']
-        self.normalization_min_limit = data_dictionary['normalization_min_limit']
         self.color = data_dictionary['color']
         self.environment = data_dictionary['environment']
 
     def export_dict(self):
         data_dictionary = super(ReconstructionPlotConfig, self).export_dict()
-        data_dictionary['normalization_max_limit'] = self.normalization_max_limit
-        data_dictionary['normalization_min_limit'] = self.normalization_min_limit
         data_dictionary['color'] = self.color
         data_dictionary['environment'] = self.environment
         return data_dictionary
@@ -71,14 +82,16 @@ class MuSeqPoseConfig(OptiPoseConfig):
         self.sync_views = self.data_dictionary['sync_views']
         self.reprojection_toolbox_enabled = self.data_dictionary['reprojection_toolbox'] and all(
             [self.annotation_views[annotation].view is not None for annotation in self.annotation_views])
-        self.behaviours = self.data_dictionary['behaviours']
-        if len(self.behaviours)==0:
+        self.behaviours = self.data_dictionary.get('behaviours',[])
+        if len(self.behaviours) == 0:
             self.behaviours.append("NA")
         self.plots = {}
         if 'plots' in self.data_dictionary:
             for plot in self.data_dictionary['plots']:
                 if self.data_dictionary['plots'][plot]['type'] == 'Reconstruction':
                     self.plots[plot] = ReconstructionPlotConfig(self.data_dictionary['plots'][plot])
+                elif self.data_dictionary['plots'][plot]['type'] == 'Line':
+                    self.plots[plot] = LinePlotConfig(self.data_dictionary['plots'][plot])
 
     def get_dlt_coefficients(self, view_name):
         if view_name in self.views:

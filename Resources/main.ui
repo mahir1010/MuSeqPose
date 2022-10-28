@@ -21,7 +21,7 @@
    <string notr="true">QWidget{
 	background-color: rgb(10,10,10);
 }
-QLineEdit,QSlider, QScrollArea, QProgressBar{
+QLineEdit,QSlider, QScrollArea, QProgressBar,QSpinBox,QDoubleSpinBox{
 border:1px solid  rgb(40,40,40);
 }
 QCheckBox::indicator{
@@ -42,18 +42,25 @@ QRadioButton::indicator::checked{
 color: rgb(14, 77, 179);
 background:rgb(14, 77, 179);
 }
-QScrollBar::handle:vertical {         
-			margin:4px;
+QScrollBar:vertical{
+width:6px;
+}
+QScrollBar:horizontal{
+height:6px;
+}
+QScrollBar::handle {         
+			margin:1px;
 			border:1px solid black;
 			border-radius: 10px;
 			background-color: rgb(14, 77, 179);
+			width:5px;
         }
- QScrollBar::add-line:vertical {       
+ QScrollBar::add-line {       
             height: 0px;
             subcontrol-position: bottom;
             subcontrol-origin: margin;
         }
-        QScrollBar::sub-line:vertical {
+        QScrollBar::sub-line {
             height: 0 px;
             subcontrol-position: top;
             subcontrol-origin: margin;

@@ -19,6 +19,7 @@ from utils.PostProcessorThread import Thread
 from utils.SessionFileLoader import SessionFileLoader
 from utils.SessionFileManager import SessionFileManager
 from widgets.AlignmentWidget import AlignmentDialog
+from widgets.HeadingAnalysisWidget import HeadingAnalysisWidget
 from widgets.OptiPoseCard import OptiPoseCard
 
 
@@ -70,6 +71,7 @@ class OptiPoseWidget(QWidget):
         self.ui.add_interp_btn.clicked.connect(self.insert_interpolation_process)
         self.ui.add_kalman_btn.clicked.connect(self.insert_kalman_filter_process)
         self.ui.add_moving_avg.clicked.connect(self.insert_moving_avg_process)
+        self.ui.analysis_widget.addTab(HeadingAnalysisWidget(config).ui,"Heading")
         self.show()
 
     def start_pipeline(self, event=None):

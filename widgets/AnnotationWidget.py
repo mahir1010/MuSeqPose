@@ -166,6 +166,7 @@ class AnnotationWidget(PlayControlWidget):
 
     def set_behaviour(self, id):
         self.video_player.data_point.behaviour = self.config.behaviours[id]
+        self.video_player.data_store.set_behaviour(self.frame_number,self.config.behaviours[id])
 
     def interp_update_candidates(self):
         for idx, name in enumerate(self.config.body_parts):
