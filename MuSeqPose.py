@@ -9,7 +9,7 @@ from PySide2.QtWidgets import QApplication, QFileDialog
 import OptiPose.DLT as DLT
 from OptiPose import save_config
 from config import MuSeqPoseConfig
-from player_interface import VideoPlayer
+from player_interface.VideoPlayer import VideoPlayer
 from player_interface.PlotPlayer import ReconstructionPlayer, LinePlotPlayer
 from utils.SessionFileManager import SessionFileManager
 from widgets.AnnotationWidget import AnnotationWidget

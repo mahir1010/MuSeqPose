@@ -7,7 +7,8 @@ from ui_Skeleton import SkeletonController
 from widgets.ImageViewer import AnnotationImageViewer
 from widgets.PlayControlWidget import PlayControlWidget
 from widgets.ui_KeyPoint import KeyPointController
-
+import time
+from datetime import timedelta
 
 class AnnotationWidget(PlayControlWidget):
     reproject = Signal(str, int, list, list)
@@ -109,6 +110,8 @@ class AnnotationWidget(PlayControlWidget):
             self.ui.scrollArea_2.ensureWidgetVisible(self.current_keypoint)
         self.video_player.data_point_drawer.mark_selected(self.config.body_parts[id], state)
 
+    def get_timestamp(self, frame_number):
+        return str(timedelta(seconds=round(frame_number / self.video_player.video_reader.fps,3)))
     def render_next_frame(self, redraw=None):
         if type(redraw) == bool and redraw:
             self.image_viewer.draw_frame(self.video_player.current_frame)
@@ -116,6 +119,7 @@ class AnnotationWidget(PlayControlWidget):
             self.frame_number = self.video_player.render_next_frame(self.image_viewer)
         self.ui.frameNumber.setText(
             f'<html style="font-weight:600">Frame-Number: {self.frame_number}/{self.video_player.get_number_of_frames()}</html>')
+        self.ui.timestamp.setText(f'<html style="font-weight:600">{self.get_timestamp(self.frame_number)}</html>')
         self.update_annotation_ui(self.video_player.data_point)
         self.draw_markers()
         self.ui.seekBar.blockSignals(True)

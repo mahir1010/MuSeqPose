@@ -95,7 +95,9 @@ QScrollBar::handle {
       <item>
        <widget class="QTabWidget" name="viewTabWidget">
         <property name="styleSheet">
-         <string notr="true"/>
+         <string notr="true">QTabWidget,QTabBar{
+color:rgb(86, 152, 198);
+}</string>
         </property>
         <property name="currentIndex">
          <number>-1</number>
