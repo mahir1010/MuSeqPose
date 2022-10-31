@@ -15,7 +15,8 @@ class AnnotationWidget(PlayControlWidget):
     def update_frame_number(self):
         self.frame_number = self.video_player.frame_number
 
-    def __init__(self, view_name:str, config:MuSeqPoseConfig, ui_file, video_player:VideoPlayer, threshold=0.6, parent=None):
+    def __init__(self, view_name: str, config: MuSeqPoseConfig, ui_file, video_player: VideoPlayer, threshold=0.6,
+                 parent=None):
         super(AnnotationWidget, self).__init__(config, ui_file, threshold, parent)
         self.view_name = view_name
         self.video_player = video_player
@@ -27,6 +28,7 @@ class AnnotationWidget(PlayControlWidget):
         self.visibility_button_group = QButtonGroup()
         self.visibility_button_group.setExclusive(False)
         self.behaviour_button_group = QButtonGroup()
+        self.behaviour_button_group.setExclusive(False)
         self.interp_button_group = QButtonGroup()
         self.interp_button_group.setExclusive(False)
         self.reprojection_parts_button_group = QButtonGroup()
@@ -70,8 +72,7 @@ class AnnotationWidget(PlayControlWidget):
             btn = QCheckBox(behaviour)
             self.behaviour_button_group.addButton(btn, id=idx)
             self.ui.behaviourList.addWidget(btn)
-        self.behaviour_button_group.buttons()[0].setChecked(True)
-        self.behaviour_button_group.idClicked.connect(self.set_behaviour)
+        self.behaviour_button_group.idToggled.connect(self.set_behaviour)
         self.interp_button_group.idToggled.connect(self.interp_set_candidate)
         self.current_keypoint = self.keypoint_list[0]
         self.video_player.data_point_drawer = SkeletonController(self.config)
@@ -131,9 +132,15 @@ class AnnotationWidget(PlayControlWidget):
             self.keypoint_list[idx].visibility_checkbox.blockSignals(False)
             self.keypoint_list[idx].first_click = True
         self.behaviour_button_group.blockSignals(True)
-        if self.video_player.data_point.behaviour not in self.config.behaviours:
-            self.set_behaviour(self.behaviour_button_group.checkedId())
-        self.behaviour_button_group.buttons()[self.config.behaviours.index(skeleton.behaviour)].setChecked(True)
+        for i, btn in enumerate(self.behaviour_button_group.buttons()):
+            if self.ui.overwrite_btn.isChecked():
+                self.set_behaviour(i,btn.isChecked())
+            elif self.config.behaviours[i] in self.video_player.data_point.behaviour:
+                btn.setChecked(True)
+                self.set_behaviour(i,True)
+            else:
+                btn.setChecked(False)
+                self.set_behaviour(i, False)
         self.behaviour_button_group.blockSignals(False)
         self.interp_update_candidates()
 
@@ -164,9 +171,14 @@ class AnnotationWidget(PlayControlWidget):
         # self.image_viewer.draw_skeleton(self.video_player.data_point_drawer.itemGroup)
         self.image_viewer.draw_skeleton(self.video_player.data_point_drawer)
 
-    def set_behaviour(self, id):
-        self.video_player.data_point.behaviour = self.config.behaviours[id]
-        self.video_player.data_store.set_behaviour(self.frame_number,self.config.behaviours[id])
+    def set_behaviour(self, id, checked):
+        if checked:
+            if self.config.behaviours[id] not in self.video_player.data_point.behaviour:
+                self.video_player.data_point.behaviour.append(self.config.behaviours[id])
+        else:
+            if self.config.behaviours[id] in self.video_player.data_point.behaviour:
+                self.video_player.data_point.behaviour.remove(self.config.behaviours[id])
+        self.video_player.data_store.set_behaviour(self.frame_number, self.video_player.data_point.behaviour)
 
     def interp_update_candidates(self):
         for idx, name in enumerate(self.config.body_parts):

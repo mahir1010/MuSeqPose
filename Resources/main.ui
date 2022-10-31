@@ -19,6 +19,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget{
+color:#FFF;
 	background-color: rgb(10,10,10);
 }
 QLineEdit,QSlider, QScrollArea, QProgressBar,QSpinBox,QDoubleSpinBox{
