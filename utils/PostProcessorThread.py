@@ -1,11 +1,11 @@
-from PySide2.QtCore import QThread, Signal, QTimer, QObject, QRunnable
+from PySide2.QtCore import Signal, QTimer, QObject, QRunnable
 
-from OptiPose.post_processor_interface import PostProcessorInterface
+from OptiPose.post_processor_interface import PostProcessor
 
 
 class Thread(QRunnable):
 
-    def __init__(self, index,post_processor: PostProcessorInterface):
+    def __init__(self, index, post_processor: PostProcessor):
         super(Thread, self).__init__()
         self.index = index
         self.post_processor = post_processor

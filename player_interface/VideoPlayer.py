@@ -1,6 +1,7 @@
+from OptiPose import AnnotationConfig
 from OptiPose.data_store_interface import initialize_datastore_reader
 from OptiPose.video_reader_interface import initialize_video_reader
-from config import AnnotationConfig, MuSeqPoseConfig
+from config import MuSeqPoseConfig
 from player_interface.PlayerInterface import PlayerInterface
 
 

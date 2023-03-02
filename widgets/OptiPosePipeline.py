@@ -34,6 +34,8 @@ class OptiPoseWidget(QWidget):
         self.view_checkboxes = []
         self.alignment_view_checkbox = []
         for view in self.config.views:
+            if view not in self.config.annotation_views:
+                continue
             alignment_checkbox = QCheckBox(view)
             alignment_checkbox.setChecked(True)
             self.alignment_view_checkbox.append(alignment_checkbox)
@@ -55,7 +57,7 @@ class OptiPoseWidget(QWidget):
         self.setLayout(layout)
         self.ui.axes_annotation_btn.clicked.connect(lambda x: AlignmentDialog(self, config, session_manager))
         self.ui.alignment_matrix_btn.clicked.connect(self.update_alignment_data)
-        self.ui.recon_scale.setText(str(self.config.scale))
+        self.ui.recon_scale.setText(str(self.config.computed_scale))
         self.ui.recon_threshold.setValue(self.config.threshold)
         self.ui.median_threshold.setValue(self.config.threshold)
         self.ui.interp_threshold.setValue(self.config.threshold)
@@ -66,7 +68,7 @@ class OptiPoseWidget(QWidget):
         self.operation_list = []
         self.operation_index = 0
         self.ui.execute_btn.clicked.connect(self.start_pipeline)
-        self.ui.output_file_name.setValidator(QRegExpValidator(QRegExp("[a-zA-Z0-9]{1}[a-zA-Z0-9_]*")))
+        self.ui.output_file_name.setValidator(QRegExpValidator(QRegExp("[a-zA-Z0-9]{1}[a-zA-Z0-9_.]*")))
         self.ui.add_median_btn.clicked.connect(self.insert_median_distance_culling_process)
         self.ui.add_interp_btn.clicked.connect(self.insert_interpolation_process)
         self.ui.add_kalman_btn.clicked.connect(self.insert_kalman_filter_process)
@@ -95,6 +97,7 @@ class OptiPoseWidget(QWidget):
             QMessageBox.warning(self.ui, "Error", "Need at least 2 views for alignment")
             return
         ret = OptiPose.pipeline.update_alignment_matrices(self.config, alignment_source)
+        self.ui.recon_scale.setText(str(self.config.computed_scale))
         if ret:
             QMessageBox.information(self.ui, "Success", "Alignment matrices generated")
         else:

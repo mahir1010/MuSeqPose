@@ -20,7 +20,10 @@
   <property name="styleSheet">
    <string notr="true">QWidget{
 color:#FFF;
-	background-color: rgb(10,10,10);
+	background-color: rgb(20,20,20);
+}
+QWidget:disabled {
+color:#757575;
 }
 QLineEdit,QSlider, QScrollArea, QProgressBar,QSpinBox,QDoubleSpinBox{
 border:1px solid  rgb(40,40,40);
@@ -139,8 +142,25 @@ color:rgb(86, 152, 198);
     <addaction name="actionSave"/>
     <addaction name="actionReload_Files"/>
    </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <widget class="QMenu" name="menuCalibration">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="title">
+      <string>Calibration</string>
+     </property>
+     <addaction name="actionCalibration"/>
+     <addaction name="actionImport_DLT_Coefficients"/>
+    </widget>
+    <addaction name="menuCalibration"/>
+   </widget>
    <addaction name="menuProject"/>
    <addaction name="menuData_Files"/>
+   <addaction name="menuTools"/>
   </widget>
   <action name="actionNew">
    <property name="text">
@@ -177,6 +197,19 @@ color:rgb(86, 152, 198);
   <action name="actionReload_Files">
    <property name="text">
     <string>Reload Data</string>
+   </property>
+  </action>
+  <action name="actionCalibration">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Calibration Toolbox</string>
+   </property>
+  </action>
+  <action name="actionImport_DLT_Coefficients">
+   <property name="text">
+    <string>Import DLT Coefficients</string>
    </property>
   </action>
  </widget>

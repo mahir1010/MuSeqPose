@@ -1,5 +1,3 @@
-import os
-
 from OptiPose.config import OptiPoseConfig
 
 
@@ -51,38 +49,28 @@ class ReconstructionPlotConfig(PlotConfig):
         return data_dictionary
 
 
-class AnnotationConfig:
-    def __init__(self, data_dictionary):
-        self.view = data_dictionary.get('view', None)
-        self.annotation_file = data_dictionary['annotation_file']
-        self.annotation_file_flavor = data_dictionary['annotation_file_flavor']
-        self.video_file = data_dictionary['video_file']
-        assert os.path.isfile(self.video_file)
-        self.video_reader = data_dictionary['video_reader']
-
-    def export_dict(self):
-        return {'view': self.view,
-                'annotation_file': self.annotation_file,
-                'annotation_file_flavor': self.annotation_file_flavor,
-                'video_file': self.video_file,
-                'video_reader': self.video_reader
-                }
-
-
 class MuSeqPoseConfig(OptiPoseConfig):
 
     def __init__(self, path):
         super(MuSeqPoseConfig, self).__init__(path)
-        self.annotation_views = {}
-        if 'annotation' in self.data_dictionary:
-            for annotation_view in self.data_dictionary['annotation']:
-                assert annotation_view != 'OptiPose' and annotation_view != 'Sync'
-                data = self.data_dictionary['annotation'][annotation_view]
-                self.annotation_views[annotation_view] = AnnotationConfig(data)
-        self.sync_views = self.data_dictionary['sync_views']
-        self.reprojection_toolbox_enabled = self.data_dictionary['reprojection_toolbox'] and all(
+        self.sync_views = self.data_dictionary.get('sync_views', [])
+        self.calibration_toolbox_enabled = self.data_dictionary.get('calibration_toolbox', {}).get('enabled', False)
+        self.calibration_static_points = []
+        if self.calibration_toolbox_enabled:
+            self.calibration_static_points = self.data_dictionary['calibration_toolbox'].get('static_points', [])
+            for view in self.views.values():
+                if view.f_px == -1 or len(view.principal_point) == 0 or len(view.resolution) == 0:
+                    print("Camera information missing. Disabling calibration tool...")
+                    self.calibration_toolbox_enabled = False
+            self.calibration_static_point_locations = {view: {} for view in self.views}
+            for view in self.views:
+                for static_point in self.calibration_static_points:
+                    self.calibration_static_point_locations[view][static_point] = self.data_dictionary[
+                        'calibration_toolbox'].get('views', {}).get(view, {}).get(static_point, [-1, -1])
+        self.reprojection_toolbox_enabled = not self.calibration_toolbox_enabled and self.data_dictionary.get(
+            'reprojection_toolbox', False) and all(
             [self.annotation_views[annotation].view is not None for annotation in self.annotation_views])
-        self.behaviours = self.data_dictionary.get('behaviours',[])
+        self.behaviours = self.data_dictionary.get('behaviours', [])
         if len(self.behaviours) == 0:
             self.behaviours.append("NA")
         self.plots = {}
@@ -101,9 +89,13 @@ class MuSeqPoseConfig(OptiPoseConfig):
 
     def export_dict(self):
         data_dict = super(MuSeqPoseConfig, self).export_dict()
-        data_dict['annotation'] = {view: self.annotation_views[view].export_dict() for view in self.annotation_views}
         data_dict['sync_views'] = self.sync_views
         data_dict['reprojection_toolbox'] = self.reprojection_toolbox_enabled
         data_dict['behaviours'] = self.behaviours
+        data_dict['calibration_toolbox'] = {'enabled': self.calibration_toolbox_enabled}
+        data_dict['calibration_toolbox']['static_points'] = self.calibration_static_points
+        data_dict['calibration_toolbox']['views'] = {
+            view: {point: self.calibration_static_point_locations[view][point] for point in
+                   self.calibration_static_points} for view in self.views}
         data_dict['plots'] = {plot: self.plots[plot].export_dict() for plot in self.plots}
         return data_dict

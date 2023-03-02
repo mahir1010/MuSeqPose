@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from PySide2.QtCore import QTimer, Signal
 from PySide2.QtWidgets import QVBoxLayout, QButtonGroup, QCheckBox, QMessageBox
 
@@ -7,8 +9,7 @@ from ui_Skeleton import SkeletonController
 from widgets.ImageViewer import AnnotationImageViewer
 from widgets.PlayControlWidget import PlayControlWidget
 from widgets.ui_KeyPoint import KeyPointController
-import time
-from datetime import timedelta
+
 
 class AnnotationWidget(PlayControlWidget):
     reproject = Signal(str, int, list, list)
@@ -111,7 +112,8 @@ class AnnotationWidget(PlayControlWidget):
         self.video_player.data_point_drawer.mark_selected(self.config.body_parts[id], state)
 
     def get_timestamp(self, frame_number):
-        return str(timedelta(seconds=round(frame_number / self.video_player.video_reader.fps,3)))
+        return str(timedelta(seconds=round(frame_number / self.video_player.video_reader.fps, 3)))
+
     def render_next_frame(self, redraw=None):
         if type(redraw) == bool and redraw:
             self.image_viewer.draw_frame(self.video_player.current_frame)
@@ -138,10 +140,10 @@ class AnnotationWidget(PlayControlWidget):
         self.behaviour_button_group.blockSignals(True)
         for i, btn in enumerate(self.behaviour_button_group.buttons()):
             if self.ui.overwrite_btn.isChecked():
-                self.set_behaviour(i,btn.isChecked())
+                self.set_behaviour(i, btn.isChecked())
             elif self.config.behaviours[i] in self.video_player.data_point.behaviour:
                 btn.setChecked(True)
-                self.set_behaviour(i,True)
+                self.set_behaviour(i, True)
             else:
                 btn.setChecked(False)
                 self.set_behaviour(i, False)

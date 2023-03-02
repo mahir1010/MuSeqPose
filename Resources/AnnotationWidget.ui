@@ -72,7 +72,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <property name="tabSpacing">
         <number>6</number>
@@ -189,13 +189,13 @@
          </item>
         </layout>
        </widget>
-       <widget class="QWidget" name="page_2">
+       <widget class="QWidget" name="interpolationToolBox">
         <property name="geometry">
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>186</width>
-          <height>233</height>
+          <width>200</width>
+          <height>519</height>
          </rect>
         </property>
         <attribute name="label">
@@ -227,8 +227,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>96</width>
-              <height>26</height>
+              <width>196</width>
+              <height>338</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -317,8 +317,8 @@
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>96</width>
-          <height>242</height>
+          <width>200</width>
+          <height>519</height>
          </rect>
         </property>
         <attribute name="label">
@@ -355,8 +355,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>96</width>
-                <height>26</height>
+                <width>194</width>
+                <height>222</height>
                </rect>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout">
@@ -402,8 +402,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>96</width>
-                <height>26</height>
+                <width>194</width>
+                <height>221</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_13">

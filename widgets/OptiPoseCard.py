@@ -1,4 +1,4 @@
-from PySide2.QtCore import Signal, QFile, QThreadPool, QObject, Qt
+from PySide2.QtCore import Signal, QFile, QThreadPool, Qt
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QHBoxLayout, QLabel, QProgressBar, QWidget, QVBoxLayout
 

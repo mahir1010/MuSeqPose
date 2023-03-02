@@ -19,3 +19,6 @@ class SessionFileManager:
     def register_data_reader(self,view,reader):
         if view in self.session_data_readers:
             self.session_data_readers[view]=reader
+
+    def get_2D_data_readers(self):
+        return [self.session_data_readers[val] for val in self.session_data_readers if val!='OptiPose']

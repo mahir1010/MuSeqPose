@@ -1,6 +1,6 @@
-from PySide2.QtCore import QFile, QObject
+from PySide2.QtCore import QFile
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import QWidget, QDialog, QVBoxLayout
+from PySide2.QtWidgets import QDialog
 
 from config import MuSeqPoseConfig
 from ui_Skeleton import Marker
@@ -31,11 +31,15 @@ class AlignmentDialog(QDialog):
         self.ui.clear_btn.clicked.connect(self.clear_data)
         self.ui.exit_btn.clicked.connect(self.close)
         self.max_frames = 0
+        max_init = False
         for index, view in enumerate(config.views):
+            if view not in config.annotation_views:
+                continue
             widget = AnnotationImageViewer()
             widget.draw_frame(session_manager.session_video_readers[view].random_access_image(self.frame_number))
-            if index==0:
+            if not max_init:
                 self.max_frames = len(session_manager.session_video_readers[view])
+                max_init = True
             else:
                 self.max_frames = min(self.max_frames,len(session_manager.session_video_readers[view]))
             self.markers[view] = []

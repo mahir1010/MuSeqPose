@@ -4,18 +4,21 @@ from random import randint
 
 from PySide2.QtCore import QFile, QCoreApplication, Qt
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import QApplication, QFileDialog
+from PySide2.QtWidgets import QApplication, QFileDialog, QMessageBox
 
 import OptiPose.DLT as DLT
 from OptiPose import save_config
+from OptiPose.pipeline import pick_calibration_candidates
+from OptiPose.utils import update_config_dlt_coeffs
 from config import MuSeqPoseConfig
-from player_interface.VideoPlayer import VideoPlayer
 from player_interface.PlotPlayer import ReconstructionPlayer, LinePlotPlayer
+from player_interface.VideoPlayer import VideoPlayer
 from utils.SessionFileManager import SessionFileManager
 from widgets.AnnotationWidget import AnnotationWidget
 from widgets.OptiPosePipeline import OptiPoseWidget
 from widgets.PlayControlWidget import PlayControlWidget
 from widgets.SyncViewWidget import SyncViewWidget
+from widgets.CalibrationWidget import CalibrationDialog
 
 
 class MuSeqAnnotator(QApplication):
@@ -29,14 +32,42 @@ class MuSeqAnnotator(QApplication):
         self.ui.actionLoad.triggered.connect(self.open_project)
         self.ui.setWindowTitle('MuSeq Pose Kit')
         self.ui.actionSave.triggered.connect(self.save_files)
+        self.ui.actionCalibration.setEnabled(False)
+        self.ui.actionCalibration.triggered.connect(self.generate_calibration_data)
+        self.ui.actionImport_DLT_Coefficients.triggered.connect(self.import_dlt_coefficients)
         self.views = []
         self.file_name = None
         self.config = None
         self.current_view_index = 0
         self.players = {}
-        self.ui.actionSave_Config.triggered.connect(save_config)
+        self.ui.actionSave_Config.triggered.connect(self.save_config_event)
         self.session_manager = None
         self.global_frame_number = 0
+
+    def save_config_event(self):
+        save_config(self.config.path,self.config.export_dict())
+
+    def import_dlt_coefficients(self):
+        file = QFileDialog.getOpenFileName(self.ui, f"Load DLT Coefficient File",
+                                                self.config.output_folder, 'CSV (*.csv)')[0]
+        order = QFileDialog.getOpenFileName(self.ui, f"Load Camera Order File",
+                                                self.config.output_folder, 'txt (*.txt)')[0]
+        if file and order:
+            try:
+                order = open(order,'r')
+                update_config_dlt_coeffs(self.config,file,order.read().strip().split(' '))
+            except Exception as ex:
+                QMessageBox.warning(self.ui, 'Error', f'Could not load DLT Coefficients\n{ex}')
+                return
+            QMessageBox.information(self.ui, 'Success', f'DLT Coefficients Loaded!')
+
+    def generate_calibration_data(self):
+        resolution = list(self.config.views.values())[0].resolution
+        candidates = pick_calibration_candidates(self.config, self.session_manager.get_2D_data_readers(),resolution, int(resolution[0]*0.07))
+        if len(candidates) <= 10:
+            QMessageBox.warning(self.ui, 'Error', 'Could not find at least 10 common annotated-frame instances.')
+            return
+        dialog = CalibrationDialog(self.ui,self.config,self.session_manager,candidates)
 
     def reset_app(self):
         for idx, view in enumerate(self.views):
@@ -49,6 +80,7 @@ class MuSeqAnnotator(QApplication):
         self.views.clear()
         self.file_name = None
         self.config = None
+        self.ui.actionCalibration.setEnabled(False)
         self.current_view_index = 0
         self.players = {}
         self.session_manager = None
@@ -69,7 +101,7 @@ class MuSeqAnnotator(QApplication):
         self.config = MuSeqPoseConfig(self.file_name)
         self.session_manager = SessionFileManager(self.config)
         self.ui.setWindowTitle(f'MuSeq Pose Kit : {self.config.project_name}')
-        while len(self.config.colors) < self.config.num_parts:
+        while len(self.config.colors) < self.config.num_parts+len(self.config.calibration_static_points):
             self.config.colors.append([randint(0, 255) for i in range(3)])
         for view in self.config.annotation_views:
             video_player = VideoPlayer(self.config, self.config.annotation_views[view])
@@ -88,7 +120,7 @@ class MuSeqAnnotator(QApplication):
                 self.players[plot] = ReconstructionPlayer(self.config, self.config.plots[plot])
             else:
                 self.players[plot] = LinePlotPlayer(self.config, self.config.plots[plot])
-        if len(self.config.sync_views)>0:
+        if len(self.config.sync_views) > 0:
             sync_controller = SyncViewWidget(self.config, os.path.join('Resources', 'SyncViewPlayer.ui'),
                                              [player for view, player in self.players.items() if
                                               view in self.config.sync_views])
@@ -96,6 +128,8 @@ class MuSeqAnnotator(QApplication):
             self.views.append(sync_controller)
             self.ui.viewTabWidget.addTab(sync_controller, "sync")
         widget = OptiPoseWidget(self.config, self.session_manager)
+
+        self.ui.actionCalibration.setEnabled(self.config.calibration_toolbox_enabled)
         self.views.append(widget)
         self.ui.viewTabWidget.addTab(widget, "OptiPose")
         self.current_view_index = 0

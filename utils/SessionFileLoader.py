@@ -1,5 +1,5 @@
 from PySide2.QtCore import Signal, Qt
-from PySide2.QtWidgets import QWidget, QHBoxLayout, QVBoxLayout, QComboBox, QLabel, QPushButton, QFileDialog, \
+from PySide2.QtWidgets import QWidget, QHBoxLayout, QComboBox, QPushButton, QFileDialog, \
     QMessageBox
 
 from OptiPose.data_store_interface import datastore_readers, initialize_datastore_reader

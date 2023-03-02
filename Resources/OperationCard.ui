@@ -42,7 +42,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">#card{
-	background-color: rgba(20, 20, 20,180);
+	background-color: rgba(30, 30, 30,180);
 	border-radius:10px;
    text-align: :center;
 }
@@ -171,7 +171,7 @@ background-color: rgba(50, 50, 50,0);
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="progress_container" stretch="">
+    <layout class="QVBoxLayout" name="progress_container">
      <property name="spacing">
       <number>10</number>
      </property>

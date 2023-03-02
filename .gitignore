@@ -1,4 +1,4 @@
 .idea
-Resources/*.yaml
-Resources/*.yml
+Resources/**/*.yaml
+Resources/**/*.yml
 __*
