@@ -119,7 +119,7 @@ class ReconstructionPlayer(PlotPlayer):
         view.camera.center = (0.5, 0.5, 0)
         self.markers = {}
         self.lines = []
-        self.line = LinePlot(np.zeros((self.config.num_parts, 3)), width=2, color='red', parent=view.scene,
+        self.line = LinePlot(np.zeros((self.config.num_parts, 3)), width=2, color=view_data.color, parent=view.scene,
                              connect=np.array([[0, 1]]), marker_size=4)
         self.scene_canvas.freeze()
         for item in view_data.environment.values():
