@@ -1,4 +1,8 @@
+*.egg-info
+dist
 .idea
-Resources/**/*.yaml
-Resources/**/*.yml
-__*
+**/*.yaml
+**/*.yml
+**/__pycache__
+*.pyc
+

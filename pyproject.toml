@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=67.0"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "MuSeqPose"
+version = "0.0.1"
+authors = [
+  { name="Mahir Patel", email="mahirp@bu.edu" },
+]
+description = "A toolkit to reconstruct,post-process, and analyze 3D Poses"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+[tool.setuptools.package-data]
+"MuSeqPose.Resources" = ["*.ui"]
+[project.gui-scripts]
+MuseqPose = "MuSeqPose.pose_kit:launch_gui"

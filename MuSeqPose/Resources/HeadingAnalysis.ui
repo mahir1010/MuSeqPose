@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>HeadingTab</class>
+    <widget class="QWidget" name="HeadingTab">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>697</width>
+                <height>613</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>Form</string>
+        </property>
+        <property name="styleSheet">
+            <string notr="true">QGroupBox
+                {
+                font-size: 12px;
+                font-weight: bold;
+                }
+            </string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout" rowstretch="3,1,1,1,1" columnstretch="1"
+                rowminimumheight="60,30,30,30,30">
+            <item row="4" column="0">
+                <widget class="QPushButton" name="pushButton">
+                    <property name="text">
+                        <string/>
+                    </property>
+                    <property name="icon">
+                        <iconset theme="add">
+                            <normaloff>.</normaloff>.
+                        </iconset>
+                    </property>
+                </widget>
+            </item>
+            <item row="2" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,2,2">
+                    <item>
+                        <widget class="QLabel" name="label_17">
+                            <property name="text">
+                                <string>Body Direction</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QGroupBox" name="bd_v1_g">
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>50</height>
+                                </size>
+                            </property>
+                            <property name="title">
+                                <string>V1</string>
+                            </property>
+                            <layout class="QHBoxLayout" name="horizontalLayout_8">
+                                <property name="spacing">
+                                    <number>0</number>
+                                </property>
+                                <property name="leftMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="topMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="rightMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="bottomMargin">
+                                    <number>0</number>
+                                </property>
+                                <item>
+                                    <widget class="QScrollArea" name="scrollArea_3">
+                                        <property name="sizePolicy">
+                                            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="minimumSize">
+                                            <size>
+                                                <width>0</width>
+                                                <height>30</height>
+                                            </size>
+                                        </property>
+                                        <property name="verticalScrollBarPolicy">
+                                            <enum>Qt::ScrollBarAlwaysOff</enum>
+                                        </property>
+                                        <property name="sizeAdjustPolicy">
+                                            <enum>QAbstractScrollArea::AdjustToContents</enum>
+                                        </property>
+                                        <property name="widgetResizable">
+                                            <bool>true</bool>
+                                        </property>
+                                        <widget class="QWidget" name="bd_v1">
+                                            <property name="geometry">
+                                                <rect>
+                                                    <x>0</x>
+                                                    <y>0</y>
+                                                    <width>261</width>
+                                                    <height>83</height>
+                                                </rect>
+                                            </property>
+                                            <layout class="QHBoxLayout" name="horizontalLayout_12">
+                                                <property name="spacing">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="leftMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="topMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="rightMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="bottomMargin">
+                                                    <number>0</number>
+                                                </property>
+                                            </layout>
+                                        </widget>
+                                    </widget>
+                                </item>
+                            </layout>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QGroupBox" name="bd_v2_g">
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="title">
+                                <string>V2</string>
+                            </property>
+                            <layout class="QHBoxLayout" name="horizontalLayout_9">
+                                <property name="spacing">
+                                    <number>0</number>
+                                </property>
+                                <property name="leftMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="topMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="rightMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="bottomMargin">
+                                    <number>0</number>
+                                </property>
+                                <item>
+                                    <widget class="QScrollArea" name="scrollArea_4">
+                                        <property name="sizePolicy">
+                                            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                                                <horstretch>0</horstretch>
+                                                <verstretch>0</verstretch>
+                                            </sizepolicy>
+                                        </property>
+                                        <property name="minimumSize">
+                                            <size>
+                                                <width>0</width>
+                                                <height>30</height>
+                                            </size>
+                                        </property>
+                                        <property name="verticalScrollBarPolicy">
+                                            <enum>Qt::ScrollBarAlwaysOff</enum>
+                                        </property>
+                                        <property name="sizeAdjustPolicy">
+                                            <enum>QAbstractScrollArea::AdjustToContents</enum>
+                                        </property>
+                                        <property name="widgetResizable">
+                                            <bool>true</bool>
+                                        </property>
+                                        <widget class="QWidget" name="bd_v2">
+                                            <property name="geometry">
+                                                <rect>
+                                                    <x>0</x>
+                                                    <y>0</y>
+                                                    <width>260</width>
+                                                    <height>83</height>
+                                                </rect>
+                                            </property>
+                                            <layout class="QHBoxLayout" name="horizontalLayout_13">
+                                                <property name="spacing">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="leftMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="topMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="rightMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="bottomMargin">
+                                                    <number>0</number>
+                                                </property>
+                                            </layout>
+                                        </widget>
+                                    </widget>
+                                </item>
+                            </layout>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+            <item row="1" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,2,2">
+                    <item>
+                        <widget class="QLabel" name="label_16">
+                            <property name="text">
+                                <string>Head Direction</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QGroupBox" name="hd_v1_g">
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>50</height>
+                                </size>
+                            </property>
+                            <property name="title">
+                                <string>V1</string>
+                            </property>
+                            <layout class="QHBoxLayout" name="horizontalLayout_6">
+                                <property name="spacing">
+                                    <number>0</number>
+                                </property>
+                                <property name="leftMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="topMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="rightMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="bottomMargin">
+                                    <number>0</number>
+                                </property>
+                                <item>
+                                    <widget class="QScrollArea" name="scrollArea">
+                                        <property name="minimumSize">
+                                            <size>
+                                                <width>0</width>
+                                                <height>30</height>
+                                            </size>
+                                        </property>
+                                        <property name="verticalScrollBarPolicy">
+                                            <enum>Qt::ScrollBarAlwaysOff</enum>
+                                        </property>
+                                        <property name="sizeAdjustPolicy">
+                                            <enum>QAbstractScrollArea::AdjustToContents</enum>
+                                        </property>
+                                        <property name="widgetResizable">
+                                            <bool>true</bool>
+                                        </property>
+                                        <widget class="QWidget" name="hd_v1">
+                                            <property name="geometry">
+                                                <rect>
+                                                    <x>0</x>
+                                                    <y>0</y>
+                                                    <width>261</width>
+                                                    <height>83</height>
+                                                </rect>
+                                            </property>
+                                            <layout class="QHBoxLayout" name="horizontalLayout_5">
+                                                <property name="spacing">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="leftMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="topMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="rightMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="bottomMargin">
+                                                    <number>0</number>
+                                                </property>
+                                            </layout>
+                                        </widget>
+                                    </widget>
+                                </item>
+                            </layout>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QGroupBox" name="hd_v2_g">
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="title">
+                                <string>V2</string>
+                            </property>
+                            <layout class="QHBoxLayout" name="horizontalLayout_7">
+                                <property name="spacing">
+                                    <number>0</number>
+                                </property>
+                                <property name="leftMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="topMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="rightMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="bottomMargin">
+                                    <number>0</number>
+                                </property>
+                                <item>
+                                    <widget class="QScrollArea" name="scrollArea_2">
+                                        <property name="minimumSize">
+                                            <size>
+                                                <width>0</width>
+                                                <height>30</height>
+                                            </size>
+                                        </property>
+                                        <property name="verticalScrollBarPolicy">
+                                            <enum>Qt::ScrollBarAlwaysOff</enum>
+                                        </property>
+                                        <property name="sizeAdjustPolicy">
+                                            <enum>QAbstractScrollArea::AdjustToContents</enum>
+                                        </property>
+                                        <property name="widgetResizable">
+                                            <bool>true</bool>
+                                        </property>
+                                        <widget class="QWidget" name="hd_v2">
+                                            <property name="geometry">
+                                                <rect>
+                                                    <x>0</x>
+                                                    <y>0</y>
+                                                    <width>260</width>
+                                                    <height>83</height>
+                                                </rect>
+                                            </property>
+                                            <layout class="QHBoxLayout" name="horizontalLayout_11">
+                                                <property name="spacing">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="leftMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="topMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="rightMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="bottomMargin">
+                                                    <number>0</number>
+                                                </property>
+                                            </layout>
+                                        </widget>
+                                    </widget>
+                                </item>
+                            </layout>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+            <item row="3" column="0">
+                <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,4">
+                    <item>
+                        <widget class="QLabel" name="label_18">
+                            <property name="text">
+                                <string>Movement Direction</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QGroupBox" name="md_v1_g">
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>50</height>
+                                </size>
+                            </property>
+                            <property name="title">
+                                <string>V1</string>
+                            </property>
+                            <layout class="QHBoxLayout" name="horizontalLayout_10">
+                                <property name="spacing">
+                                    <number>0</number>
+                                </property>
+                                <property name="leftMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="topMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="rightMargin">
+                                    <number>0</number>
+                                </property>
+                                <property name="bottomMargin">
+                                    <number>0</number>
+                                </property>
+                                <item>
+                                    <widget class="QScrollArea" name="scrollArea_5">
+                                        <property name="minimumSize">
+                                            <size>
+                                                <width>0</width>
+                                                <height>30</height>
+                                            </size>
+                                        </property>
+                                        <property name="verticalScrollBarPolicy">
+                                            <enum>Qt::ScrollBarAlwaysOff</enum>
+                                        </property>
+                                        <property name="sizeAdjustPolicy">
+                                            <enum>QAbstractScrollArea::AdjustToContents</enum>
+                                        </property>
+                                        <property name="widgetResizable">
+                                            <bool>true</bool>
+                                        </property>
+                                        <widget class="QWidget" name="md_v1">
+                                            <property name="geometry">
+                                                <rect>
+                                                    <x>0</x>
+                                                    <y>0</y>
+                                                    <width>534</width>
+                                                    <height>42</height>
+                                                </rect>
+                                            </property>
+                                            <layout class="QHBoxLayout" name="horizontalLayout_14">
+                                                <property name="spacing">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="leftMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="topMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="rightMargin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="bottomMargin">
+                                                    <number>0</number>
+                                                </property>
+                                            </layout>
+                                        </widget>
+                                    </widget>
+                                </item>
+                            </layout>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+            <item row="0" column="0">
+                <widget class="QTextEdit" name="textEdit_5">
+                    <property name="readOnly">
+                        <bool>true</bool>
+                    </property>
+                    <property name="html">
+                        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+                            &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style
+                            type=&quot;text/css&quot;&gt;
+                            p, li { white-space: pre-wrap; }
+                            &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Noto Sans'; font-size:10pt;
+                            font-weight:400; font-style:normal;&quot;&gt;
+                            &lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px;
+                            margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span
+                            style=&quot; font-weight:600;&quot;&gt;Description&lt;/span&gt;&lt;/p&gt;
+                            &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px;
+                            margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Generates a
+                            file with Head Direction, Body Direction, and Movement Direction data.&lt;/p&gt;
+                            &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px;
+                            margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Head
+                            Direction and Body Direction vectors are generated by v2-v1.&lt;/p&gt;
+                            &lt;p align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px;
+                            margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Movement
+                            Direction computes average position from V1. MD = AVG(V1)&lt;span style=&quot;
+                            vertical-align:sub;&quot;&gt;I &lt;/span&gt;-AVG(V1)&lt;span style=&quot;
+                            vertical-align:sub;&quot;&gt;I-1&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                        </string>
+                    </property>
+                </widget>
+            </item>
+        </layout>
+    </widget>
+    <resources/>
+    <connections/>
+</ui>

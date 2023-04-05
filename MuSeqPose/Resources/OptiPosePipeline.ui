@@ -1,0 +1,871 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>Form</class>
+    <widget class="QWidget" name="Form">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>1352</width>
+                <height>976</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>Form</string>
+        </property>
+        <property name="styleSheet">
+            <string notr="true">QGroupBox
+                {
+                font-size: 18px;
+                font-weight: bold;
+                }
+            </string>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout" stretch="4,1">
+            <item>
+                <layout class="QGridLayout" name="gridLayout_8" rowstretch="1,2,0" columnstretch="1,1">
+                    <property name="bottomMargin">
+                        <number>0</number>
+                    </property>
+                    <item row="0" column="0" colspan="2">
+                        <widget class="QGroupBox" name="groupBox_2">
+                            <property name="styleSheet">
+                                <string notr="true"/>
+                            </property>
+                            <property name="title">
+                                <string>Input</string>
+                            </property>
+                            <layout class="QGridLayout" name="gridLayout_7" rowstretch="1,0,0,0,0,0,0,0,0,0,0"
+                                    columnstretch="0,0,0,0,0">
+                                <item row="7" column="4">
+                                    <widget class="QLabel" name="label_13">
+                                        <property name="text">
+                                            <string>File Prefix</string>
+                                        </property>
+                                        <property name="alignment">
+                                            <set>Qt::AlignCenter</set>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="1" column="0" colspan="5">
+                                    <spacer name="horizontalSpacer_2">
+                                        <property name="orientation">
+                                            <enum>Qt::Horizontal</enum>
+                                        </property>
+                                        <property name="sizeHint" stdset="0">
+                                            <size>
+                                                <width>40</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </item>
+                                <item row="4" column="4">
+                                    <widget class="QPushButton" name="alignment_matrix_btn">
+                                        <property name="text">
+                                            <string>Alignment Matrices</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="8" column="2">
+                                    <widget class="QDoubleSpinBox" name="recon_threshold">
+                                        <property name="maximum">
+                                            <double>1.000000000000000</double>
+                                        </property>
+                                        <property name="singleStep">
+                                            <double>0.050000000000000</double>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="3" column="0" colspan="5">
+                                    <spacer name="horizontalSpacer">
+                                        <property name="orientation">
+                                            <enum>Qt::Horizontal</enum>
+                                        </property>
+                                        <property name="sizeHint" stdset="0">
+                                            <size>
+                                                <width>40</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </item>
+                                <item row="10" column="0" colspan="5">
+                                    <widget class="QPushButton" name="add_input_file">
+                                        <property name="text">
+                                            <string/>
+                                        </property>
+                                        <property name="icon">
+                                            <iconset theme="add">
+                                                <normaloff>../../../../../.designer/backup</normaloff>
+                                                ../../../../../.designer/backup
+                                            </iconset>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="8" column="3">
+                                    <widget class="QLineEdit" name="recon_scale">
+                                        <property name="alignment">
+                                            <set>Qt::AlignCenter</set>
+                                        </property>
+                                        <property name="placeholderText">
+                                            <string>Scale</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="7" column="1">
+                                    <widget class="QLabel" name="label">
+                                        <property name="text">
+                                            <string>Reconstruction Algorithm</string>
+                                        </property>
+                                        <property name="alignment">
+                                            <set>Qt::AlignCenter</set>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="2" column="0">
+                                    <widget class="QLabel" name="label_12">
+                                        <property name="text">
+                                            <string>Load From Storage</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="7" column="2">
+                                    <widget class="QLabel" name="label_2">
+                                        <property name="text">
+                                            <string>Threshold</string>
+                                        </property>
+                                        <property name="alignment">
+                                            <set>Qt::AlignCenter</set>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="8" column="1">
+                                    <widget class="QComboBox" name="recon_algorithm">
+                                        <property name="toolTip">
+                                            <string>Reconstruction Algorithm</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="8" column="0">
+                                    <widget class="QLabel" name="label_10">
+                                        <property name="text">
+                                            <string>Reconstruction Parameters</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="0" column="0" colspan="3" alignment="Qt::AlignRight">
+                                    <widget class="QRadioButton" name="custom_file_btn">
+                                        <property name="layoutDirection">
+                                            <enum>Qt::RightToLeft</enum>
+                                        </property>
+                                        <property name="text">
+                                            <string>Custom File Input</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="4" column="3">
+                                    <widget class="QPushButton" name="axes_annotation_btn">
+                                        <property name="text">
+                                            <string>Axes Annotations</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="9" column="0" colspan="5">
+                                    <spacer name="horizontalSpacer_3">
+                                        <property name="orientation">
+                                            <enum>Qt::Horizontal</enum>
+                                        </property>
+                                        <property name="sizeHint" stdset="0">
+                                            <size>
+                                                <width>40</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </item>
+                                <item row="5" column="1" colspan="4">
+                                    <layout class="QHBoxLayout" name="view_selection_list"/>
+                                </item>
+                                <item row="2" column="1" colspan="4">
+                                    <layout class="QHBoxLayout" name="file_loader_container"/>
+                                </item>
+                                <item row="4" column="1" colspan="2">
+                                    <layout class="QHBoxLayout" name="alignment_view_list"/>
+                                </item>
+                                <item row="0" column="3" alignment="Qt::AlignRight">
+                                    <widget class="QRadioButton" name="reconstruction_btn">
+                                        <property name="layoutDirection">
+                                            <enum>Qt::RightToLeft</enum>
+                                        </property>
+                                        <property name="text">
+                                            <string>Reconstruction</string>
+                                        </property>
+                                        <property name="checked">
+                                            <bool>true</bool>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="4" column="0">
+                                    <widget class="QLabel" name="label_9">
+                                        <property name="text">
+                                            <string>Generate</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="5" column="0">
+                                    <widget class="QLabel" name="label_8">
+                                        <property name="text">
+                                            <string>Select Views</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="8" column="4">
+                                    <widget class="QLineEdit" name="recon_file_prefix">
+                                        <property name="text">
+                                            <string>recon</string>
+                                        </property>
+                                        <property name="alignment">
+                                            <set>Qt::AlignCenter</set>
+                                        </property>
+                                        <property name="placeholderText">
+                                            <string>File Prefix</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item row="7" column="3">
+                                    <widget class="QLabel" name="label_11">
+                                        <property name="text">
+                                            <string>Scale</string>
+                                        </property>
+                                        <property name="alignment">
+                                            <set>Qt::AlignCenter</set>
+                                        </property>
+                                    </widget>
+                                </item>
+                            </layout>
+                        </widget>
+                    </item>
+                    <item row="1" column="0" rowspan="2">
+                        <widget class="QGroupBox" name="groupBox">
+                            <property name="title">
+                                <string>Post-Processing</string>
+                            </property>
+                            <layout class="QGridLayout" name="gridLayout">
+                                <item row="1" column="0">
+                                    <widget class="QTabWidget" name="tabWidget">
+                                        <property name="tabPosition">
+                                            <enum>QTabWidget::North</enum>
+                                        </property>
+                                        <property name="tabShape">
+                                            <enum>QTabWidget::Rounded</enum>
+                                        </property>
+                                        <property name="currentIndex">
+                                            <number>3</number>
+                                        </property>
+                                        <widget class="QWidget" name="distance_filter">
+                                            <property name="sizePolicy">
+                                                <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                                                    <horstretch>0</horstretch>
+                                                    <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                            </property>
+                                            <attribute name="title">
+                                                <string>Median Distance Culling</string>
+                                            </attribute>
+                                            <layout class="QGridLayout" name="gridLayout_4" rowstretch="0,0,0,0"
+                                                    columnstretch="1,1,1" rowminimumheight="0,30,30,30">
+                                                <property name="leftMargin">
+                                                    <number>6</number>
+                                                </property>
+                                                <property name="topMargin">
+                                                    <number>6</number>
+                                                </property>
+                                                <property name="rightMargin">
+                                                    <number>6</number>
+                                                </property>
+                                                <property name="bottomMargin">
+                                                    <number>6</number>
+                                                </property>
+                                                <item row="1" column="0" colspan="2">
+                                                    <widget class="QLabel" name="label_3">
+                                                        <property name="text">
+                                                            <string>Threshold</string>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="1" column="2">
+                                                    <widget class="QDoubleSpinBox" name="median_threshold">
+                                                        <property name="sizePolicy">
+                                                            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                                                <horstretch>0</horstretch>
+                                                                <verstretch>0</verstretch>
+                                                            </sizepolicy>
+                                                        </property>
+                                                        <property name="maximum">
+                                                            <double>1.000000000000000</double>
+                                                        </property>
+                                                        <property name="singleStep">
+                                                            <double>0.050000000000000</double>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="2" column="0" colspan="2">
+                                                    <widget class="QLabel" name="label_4">
+                                                        <property name="text">
+                                                            <string>Median Distance Threshold</string>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="2" column="2">
+                                                    <widget class="QLineEdit" name="median_distance_threshold">
+                                                        <property name="sizePolicy">
+                                                            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                                                <horstretch>0</horstretch>
+                                                                <verstretch>0</verstretch>
+                                                            </sizepolicy>
+                                                        </property>
+                                                        <property name="alignment">
+                                                            <set>Qt::AlignCenter</set>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="0" column="0" colspan="3">
+                                                    <widget class="QTextEdit" name="textEdit">
+                                                        <property name="sizePolicy">
+                                                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                                                <horstretch>0</horstretch>
+                                                                <verstretch>0</verstretch>
+                                                            </sizepolicy>
+                                                        </property>
+                                                        <property name="readOnly">
+                                                            <bool>true</bool>
+                                                        </property>
+                                                        <property name="html">
+                                                            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML
+                                                                4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+                                                                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot;
+                                                                content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+                                                                p, li { white-space: pre-wrap; }
+                                                                &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot;
+                                                                font-family:'Noto Sans'; font-size:10pt;
+                                                                font-weight:400; font-style:normal;&quot;&gt;
+                                                                &lt;p align=&quot;center&quot; style=&quot;
+                                                                margin-top:0px; margin-bottom:0px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span
+                                                                style=&quot; font-weight:600;&quot;&gt;Description&lt;/span&gt;&lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Used
+                                                                for removing keypoints with extreme noise.&lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This
+                                                                post-processor removes keypoints (3D/2D) for which the
+                                                                median distance to all other valid keypoint is larger
+                                                                than the threshold distance. The keypoints are
+                                                                considered valid if their likelihood is greater than or
+                                                                equal to the threshold value. &lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The
+                                                                unit of distance will be in pixels for 2D data.&lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This
+                                                                processor assumes that at least half of the valid
+                                                                keypoints do not have extreme noise.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                                                            </string>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="3" column="0" colspan="3">
+                                                    <widget class="QPushButton" name="add_median_btn">
+                                                        <property name="text">
+                                                            <string/>
+                                                        </property>
+                                                        <property name="icon">
+                                                            <iconset theme="add">
+                                                                <normaloff>../../../../../.designer/backup</normaloff>
+                                                                ../../../../../.designer/backup
+                                                            </iconset>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                            </layout>
+                                        </widget>
+                                        <widget class="QWidget" name="interpolation">
+                                            <attribute name="title">
+                                                <string>Interpolation</string>
+                                            </attribute>
+                                            <layout class="QGridLayout" name="gridLayout_3" columnstretch="1,1,1"
+                                                    rowminimumheight="0,30,30,30">
+                                                <property name="leftMargin">
+                                                    <number>6</number>
+                                                </property>
+                                                <property name="topMargin">
+                                                    <number>6</number>
+                                                </property>
+                                                <property name="rightMargin">
+                                                    <number>6</number>
+                                                </property>
+                                                <property name="bottomMargin">
+                                                    <number>6</number>
+                                                </property>
+                                                <item row="0" column="0" colspan="3">
+                                                    <widget class="QTextEdit" name="textEdit_2">
+                                                        <property name="sizePolicy">
+                                                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                                                <horstretch>0</horstretch>
+                                                                <verstretch>0</verstretch>
+                                                            </sizepolicy>
+                                                        </property>
+                                                        <property name="readOnly">
+                                                            <bool>true</bool>
+                                                        </property>
+                                                        <property name="html">
+                                                            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML
+                                                                4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+                                                                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot;
+                                                                content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+                                                                p, li { white-space: pre-wrap; }
+                                                                &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot;
+                                                                font-family:'Noto Sans'; font-size:10pt;
+                                                                font-weight:400; font-style:normal;&quot;&gt;
+                                                                &lt;p align=&quot;center&quot; style=&quot;
+                                                                margin-top:0px; margin-bottom:0px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span
+                                                                style=&quot; font-weight:600;&quot;&gt;Description&lt;/span&gt;&lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Used
+                                                                for interpolating missing keypoints.&lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This
+                                                                post-processor fills in clusters of missing keypoints
+                                                                (3D/2D) using linear interpolation.&lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The
+                                                                maximum cluster size determines the number of frames for
+                                                                the interpolation.&lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Interpolation
+                                                                can heavily distort the underlying motion. Interpolation
+                                                                over large number of frames should be avoided. Ideal
+                                                                range should be 10% of the framerate.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                                                            </string>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="3" column="0" colspan="3">
+                                                    <widget class="QPushButton" name="add_interp_btn">
+                                                        <property name="text">
+                                                            <string/>
+                                                        </property>
+                                                        <property name="icon">
+                                                            <iconset theme="add">
+                                                                <normaloff>../../../../../.designer/backup</normaloff>
+                                                                ../../../../../.designer/backup
+                                                            </iconset>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="2" column="2">
+                                                    <widget class="QLineEdit" name="interp_max_cluster">
+                                                        <property name="sizePolicy">
+                                                            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                                                <horstretch>0</horstretch>
+                                                                <verstretch>0</verstretch>
+                                                            </sizepolicy>
+                                                        </property>
+                                                        <property name="text">
+                                                            <string>10</string>
+                                                        </property>
+                                                        <property name="alignment">
+                                                            <set>Qt::AlignCenter</set>
+                                                        </property>
+                                                        <property name="placeholderText">
+                                                            <string/>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="1" column="2">
+                                                    <widget class="QDoubleSpinBox" name="interp_threshold">
+                                                        <property name="sizePolicy">
+                                                            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                                                <horstretch>0</horstretch>
+                                                                <verstretch>0</verstretch>
+                                                            </sizepolicy>
+                                                        </property>
+                                                        <property name="maximum">
+                                                            <double>1.000000000000000</double>
+                                                        </property>
+                                                        <property name="singleStep">
+                                                            <double>0.050000000000000</double>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="2" column="0" colspan="2">
+                                                    <widget class="QLabel" name="label_6">
+                                                        <property name="text">
+                                                            <string>Maximum Cluster Size</string>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="1" column="0" colspan="2">
+                                                    <widget class="QLabel" name="label_5">
+                                                        <property name="text">
+                                                            <string>Threshold</string>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                            </layout>
+                                        </widget>
+                                        <widget class="QWidget" name="moving_average">
+                                            <attribute name="title">
+                                                <string>Moving Average</string>
+                                            </attribute>
+                                            <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,1,1"
+                                                    rowminimumheight="0,30,30,30">
+                                                <item row="0" column="0" colspan="3">
+                                                    <widget class="QTextEdit" name="textEdit_4">
+                                                        <property name="sizePolicy">
+                                                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                                                <horstretch>0</horstretch>
+                                                                <verstretch>0</verstretch>
+                                                            </sizepolicy>
+                                                        </property>
+                                                        <property name="readOnly">
+                                                            <bool>true</bool>
+                                                        </property>
+                                                        <property name="html">
+                                                            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML
+                                                                4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+                                                                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot;
+                                                                content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+                                                                p, li { white-space: pre-wrap; }
+                                                                &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot;
+                                                                font-family:'Noto Sans'; font-size:10pt;
+                                                                font-weight:400; font-style:normal;&quot;&gt;
+                                                                &lt;p align=&quot;center&quot; style=&quot;
+                                                                margin-top:0px; margin-bottom:0px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span
+                                                                style=&quot; font-weight:600;&quot;&gt;Description&lt;/span&gt;&lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Used
+                                                                for smoothing keypoints.&lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This
+                                                                post-processor smooths keypoints (3D/2D) using moving
+                                                                average.&lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;The
+                                                                window size determines the level of smoothing performed.&lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Smoothing
+                                                                can heavily distort the underlying motion. Large window
+                                                                size should be avoided. Ideal range should be 10% of the
+                                                                framerate.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                                                            </string>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="1" column="2">
+                                                    <widget class="QDoubleSpinBox" name="moving_avg_threshold">
+                                                        <property name="maximum">
+                                                            <double>1.000000000000000</double>
+                                                        </property>
+                                                        <property name="singleStep">
+                                                            <double>0.050000000000000</double>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="2" column="2">
+                                                    <widget class="QLineEdit" name="moving_avg_window">
+                                                        <property name="text">
+                                                            <string>10</string>
+                                                        </property>
+                                                        <property name="alignment">
+                                                            <set>Qt::AlignCenter</set>
+                                                        </property>
+                                                        <property name="placeholderText">
+                                                            <string/>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="3" column="0" colspan="3">
+                                                    <widget class="QPushButton" name="add_moving_avg">
+                                                        <property name="text">
+                                                            <string/>
+                                                        </property>
+                                                        <property name="icon">
+                                                            <iconset theme="add">
+                                                                <normaloff>../../../../../.designer/backup</normaloff>
+                                                                ../../../../../.designer/backup
+                                                            </iconset>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="2" column="0" colspan="2">
+                                                    <widget class="QLabel" name="label_14">
+                                                        <property name="text">
+                                                            <string>Window Size</string>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="1" column="0" colspan="2">
+                                                    <widget class="QLabel" name="label_15">
+                                                        <property name="text">
+                                                            <string>Threshold</string>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                            </layout>
+                                        </widget>
+                                        <widget class="QWidget" name="kalman_filter">
+                                            <attribute name="title">
+                                                <string>Kalman Filter</string>
+                                            </attribute>
+                                            <layout class="QGridLayout" name="gridLayout_5" rowstretch="0,0,0,0"
+                                                    columnstretch="1,1,1">
+                                                <property name="leftMargin">
+                                                    <number>6</number>
+                                                </property>
+                                                <property name="topMargin">
+                                                    <number>6</number>
+                                                </property>
+                                                <property name="rightMargin">
+                                                    <number>6</number>
+                                                </property>
+                                                <property name="bottomMargin">
+                                                    <number>6</number>
+                                                </property>
+                                                <property name="spacing">
+                                                    <number>6</number>
+                                                </property>
+                                                <item row="3" column="0" colspan="3">
+                                                    <widget class="QPushButton" name="add_kalman_btn">
+                                                        <property name="text">
+                                                            <string/>
+                                                        </property>
+                                                        <property name="icon">
+                                                            <iconset theme="add">
+                                                                <normaloff>../../../../../.designer/backup</normaloff>
+                                                                ../../../../../.designer/backup
+                                                            </iconset>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="0" column="0" colspan="3">
+                                                    <widget class="QTextEdit" name="textEdit_3">
+                                                        <property name="sizePolicy">
+                                                            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                                                <horstretch>0</horstretch>
+                                                                <verstretch>0</verstretch>
+                                                            </sizepolicy>
+                                                        </property>
+                                                        <property name="readOnly">
+                                                            <bool>true</bool>
+                                                        </property>
+                                                        <property name="html">
+                                                            <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML
+                                                                4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+                                                                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot;
+                                                                content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+                                                                p, li { white-space: pre-wrap; }
+                                                                &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot;
+                                                                font-family:'Noto Sans'; font-size:10pt;
+                                                                font-weight:400; font-style:normal;&quot;&gt;
+                                                                &lt;p align=&quot;center&quot; style=&quot;
+                                                                margin-top:0px; margin-bottom:0px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span
+                                                                style=&quot; font-weight:600;&quot;&gt;Description&lt;/span&gt;&lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Used
+                                                                for reducing noise and performing prediction&lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;This
+                                                                post-processor runs constant acceleration Kalman Filter
+                                                                for each keypoints.&lt;/p&gt;
+                                                                &lt;p align=&quot;justify&quot; style=&quot;
+                                                                margin-top:12px; margin-bottom:12px; margin-left:0px;
+                                                                margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Enabling
+                                                                skip invalid, re-initializes Kalman filter everytime an
+                                                                invalid keypoint is detected. Otherwise, it will fill
+                                                                the invalid keypoint based on the filter's prediction&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                                                            </string>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="2" column="0">
+                                                    <widget class="QCheckBox" name="kalman_skip_invalids">
+                                                        <property name="layoutDirection">
+                                                            <enum>Qt::LeftToRight</enum>
+                                                        </property>
+                                                        <property name="text">
+                                                            <string>Skip Invalids</string>
+                                                        </property>
+                                                        <property name="checked">
+                                                            <bool>true</bool>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="1" column="2">
+                                                    <widget class="QDoubleSpinBox" name="kalman_threshold">
+                                                        <property name="sizePolicy">
+                                                            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                                                                <horstretch>0</horstretch>
+                                                                <verstretch>0</verstretch>
+                                                            </sizepolicy>
+                                                        </property>
+                                                        <property name="maximum">
+                                                            <double>1.000000000000000</double>
+                                                        </property>
+                                                        <property name="singleStep">
+                                                            <double>0.050000000000000</double>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item row="1" column="0" colspan="2">
+                                                    <widget class="QLabel" name="label_7">
+                                                        <property name="text">
+                                                            <string>Threshold</string>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                            </layout>
+                                        </widget>
+                                    </widget>
+                                </item>
+                            </layout>
+                        </widget>
+                    </item>
+                    <item row="1" column="1" rowspan="2">
+                        <widget class="QGroupBox" name="groupBox_3">
+                            <property name="title">
+                                <string>Analysis</string>
+                            </property>
+                            <layout class="QGridLayout" name="gridLayout_6">
+                                <item row="0" column="0">
+                                    <widget class="QTabWidget" name="analysis_widget"/>
+                                </item>
+                            </layout>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+            <item>
+                <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,0,0">
+                    <item>
+                        <widget class="QScrollArea" name="scrollArea">
+                            <property name="sizePolicy">
+                                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>0</width>
+                                    <height>0</height>
+                                </size>
+                            </property>
+                            <property name="frameShape">
+                                <enum>QFrame::StyledPanel</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>QFrame::Raised</enum>
+                            </property>
+                            <property name="widgetResizable">
+                                <bool>true</bool>
+                            </property>
+                            <widget class="QWidget" name="scrollAreaWidgetContents">
+                                <property name="geometry">
+                                    <rect>
+                                        <x>0</x>
+                                        <y>0</y>
+                                        <width>261</width>
+                                        <height>840</height>
+                                    </rect>
+                                </property>
+                                <layout class="QVBoxLayout" name="verticalLayout_2">
+                                    <item>
+                                        <layout class="QVBoxLayout" name="pipeline_container">
+                                            <property name="spacing">
+                                                <number>10</number>
+                                            </property>
+                                            <property name="leftMargin">
+                                                <number>10</number>
+                                            </property>
+                                            <property name="topMargin">
+                                                <number>10</number>
+                                            </property>
+                                            <property name="rightMargin">
+                                                <number>10</number>
+                                            </property>
+                                            <property name="bottomMargin">
+                                                <number>10</number>
+                                            </property>
+                                        </layout>
+                                    </item>
+                                </layout>
+                            </widget>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QLineEdit" name="output_file_name">
+                            <property name="inputMask">
+                                <string/>
+                            </property>
+                            <property name="maxLength">
+                                <number>35</number>
+                            </property>
+                            <property name="alignment">
+                                <set>Qt::AlignCenter</set>
+                            </property>
+                            <property name="placeholderText">
+                                <string>Output File Name</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="execute_btn">
+                            <property name="text">
+                                <string>Execute</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="reset_btn">
+                            <property name="text">
+                                <string>Reset</string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+        </layout>
+    </widget>
+    <tabstops>
+        <tabstop>custom_file_btn</tabstop>
+        <tabstop>reconstruction_btn</tabstop>
+        <tabstop>recon_algorithm</tabstop>
+        <tabstop>recon_scale</tabstop>
+        <tabstop>recon_file_prefix</tabstop>
+        <tabstop>add_input_file</tabstop>
+        <tabstop>kalman_skip_invalids</tabstop>
+        <tabstop>add_kalman_btn</tabstop>
+        <tabstop>add_interp_btn</tabstop>
+    </tabstops>
+    <resources/>
+    <connections/>
+</ui>
