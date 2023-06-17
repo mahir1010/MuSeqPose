@@ -6,6 +6,17 @@ In addition, it supports standard pose estimation features such as pose and beha
 
 <p><span style="color: #158219;font-weight: bold">Note: Video Tutorials will be added soon!</span></p>
 
+## Installation
+```shell
+conda create -n cvkit python=3.10 pyside=5.15.8 cudatoolkit
+conda activate cvkit
+
+#Follow from Steup 2: Tensorflow website https://www.tensorflow.org/install/pip#linux (linux configuration)
+#Ignore version numbers
+
+pip install museqpose
+```
+
 ## List of Primary Widgets
 1. [Annotation Widget](#annotation-widget)
 2. [Synchronized Playback Widget](#synchronized-playback-widget)
