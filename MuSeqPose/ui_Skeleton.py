@@ -2,7 +2,7 @@ from PySide2.QtCore import Signal
 from PySide2.QtGui import Qt, QColor, QBrush, QPen
 from PySide2.QtWidgets import QGraphicsLineItem, QGraphicsEllipseItem, QGraphicsItem
 
-from MuSeqPose.config import MuSeqPoseConfig
+from MuSeqPose.utils.session_manager import SessionManager
 from cvkit.pose_estimation import Skeleton
 
 
@@ -23,11 +23,11 @@ class Marker(QGraphicsEllipseItem):
 
 class SkeletonController():
 
-    def __init__(self, config: MuSeqPoseConfig, threshold=0.6, marker_size=4):
+    def __init__(self, session_manager: SessionManager, threshold=0.6, marker_size=4):
         self.markers = {}
         self.lines = []
         self.threshold = threshold
-        self.config = config
+        self.config = session_manager.config
         self.marker_size = marker_size
         self.marker_offset = marker_size // 2
         pen = QPen(Qt.white, 1, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin)

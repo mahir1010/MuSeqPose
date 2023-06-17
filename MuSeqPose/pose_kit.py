@@ -1,3 +1,4 @@
+import glob
 import os
 import sys
 from random import randint
@@ -11,10 +12,10 @@ from MuSeqPose import get_resource
 from MuSeqPose.config import MuSeqPoseConfig
 from MuSeqPose.player_interface.PlotPlayer import ReconstructionPlayer, LinePlotPlayer
 from MuSeqPose.player_interface.VideoPlayer import VideoPlayer
-from MuSeqPose.utils.SessionFileManager import SessionFileManager
+from MuSeqPose.utils.session_manager import SessionManager
 from MuSeqPose.widgets.AnnotationWidget import AnnotationWidget
 from MuSeqPose.widgets.CalibrationWidget import CalibrationDialog
-from MuSeqPose.widgets.OptiPosePipeline import OptiPoseWidget
+from MuSeqPose.widgets.PipelineWidget import PipelineWidget
 from MuSeqPose.widgets.PlayControlWidget import PlayControlWidget
 from MuSeqPose.widgets.SyncViewWidget import SyncViewWidget
 from cvkit.pose_estimation.config import save_config
@@ -22,9 +23,9 @@ from cvkit.pose_estimation.reconstruction.EasyWand_tools import pick_calibration
 from cvkit.pose_estimation.reconstruction.EasyWand_tools import update_config_dlt_coeffs
 
 
-class MuSeqAnnotator(QApplication):
+class MuSeqPoseKit(QApplication):
     def __init__(self, argv):
-        super(MuSeqAnnotator, self).__init__(argv)
+        super(MuSeqPoseKit, self).__init__(argv)
         ui_file = QFile(get_resource('main.ui'))
         ui_file.open(QFile.ReadOnly)
         loader = QUiLoader()
@@ -65,17 +66,23 @@ class MuSeqAnnotator(QApplication):
 
     def generate_calibration_data(self):
         resolution = list(self.config.views.values())[0].resolution
-        candidates = pick_calibration_candidates(self.config, self.session_manager.get_2D_data_readers(), resolution,
-                                                 int(resolution[0] * 0.07))
+        if not os.path.exists(os.path.join(self.config.output_folder, 'calibration', 'candidates')):
+            candidates = pick_calibration_candidates(self.config, self.session_manager.get_2D_data_readers(),
+                                                     resolution,
+                                                     int(resolution[0] * 0.1))
+        else:
+            key = list(self.config.views.keys())[0]
+            candidates = [int(os.path.basename(file_name).split('.')[0]) for file_name in
+                          glob.glob(os.path.join(self.config.output_folder, 'calibration', 'candidates', key, '*.png'))]
         if len(candidates) <= 10:
             QMessageBox.warning(self.ui, 'Error', 'Could not find at least 10 common annotated-frame instances.')
             return
-        dialog = CalibrationDialog(self.ui, self.config, self.session_manager, candidates)
+        dialog = CalibrationDialog(self.ui, self.session_manager, candidates)
 
     def reset_app(self):
         for idx, view in enumerate(self.views):
             self.ui.viewTabWidget.removeTab(idx)
-            view.destroy()
+            view.deleteLater()
         for player in self.players.values():
             player.release()
             del player
@@ -102,17 +109,15 @@ class MuSeqAnnotator(QApplication):
 
     def load_data(self):
         self.config = MuSeqPoseConfig(self.file_name)
-        self.session_manager = SessionFileManager(self.config)
+        self.session_manager = SessionManager(self.config)
         self.ui.setWindowTitle(f'MuSeq Pose Kit : {self.config.project_name}')
         while len(self.config.colors) < self.config.num_parts + len(self.config.calibration_static_points):
             self.config.colors.append([randint(0, 255) for i in range(3)])
         for view in self.config.annotation_views:
-            video_player = VideoPlayer(self.config, self.config.annotation_views[view])
-            self.session_manager.register_data_reader(view, video_player.data_store)
-            self.session_manager.register_video_reader(view, video_player.video_reader)
+            video_player = VideoPlayer(self.session_manager, view, self.config.annotation_views[view])
             self.players[view] = video_player
             ui_file = get_resource('AnnotationWidget.ui')
-            play_controller = AnnotationWidget(view, self.config, ui_file, video_player,
+            play_controller = AnnotationWidget(view, self.session_manager, ui_file, video_player,
                                                threshold=self.config.threshold)
             play_controller.update_status.connect(self.update_status_bar)
             self.views.append(play_controller)
@@ -120,21 +125,20 @@ class MuSeqAnnotator(QApplication):
             self.ui.viewTabWidget.addTab(play_controller, view)
         for plot in self.config.plots:
             if self.config.plots[plot].type == "Reconstruction":
-                self.players[plot] = ReconstructionPlayer(self.config, self.config.plots[plot])
+                self.players[plot] = ReconstructionPlayer(self.session_manager, plot, self.config.plots[plot])
             else:
-                self.players[plot] = LinePlotPlayer(self.config, self.config.plots[plot])
+                self.players[plot] = LinePlotPlayer(self.session_manager, plot, self.config.plots[plot])
         if len(self.config.sync_views) > 0:
-            sync_controller = SyncViewWidget(self.config, get_resource('SyncViewPlayer.ui'),
+            sync_controller = SyncViewWidget(self.session_manager, get_resource('SyncViewPlayer.ui'),
                                              [player for view, player in self.players.items() if
                                               view in self.config.sync_views])
             sync_controller.update_status.connect(self.update_status_bar)
             self.views.append(sync_controller)
             self.ui.viewTabWidget.addTab(sync_controller, "sync")
-        widget = OptiPoseWidget(self.config, self.session_manager)
-
+        pipeline_widget = PipelineWidget(self.session_manager)
         self.ui.actionCalibration.setEnabled(self.config.calibration_toolbox_enabled)
-        self.views.append(widget)
-        self.ui.viewTabWidget.addTab(widget, "CVKit")
+        self.views.append(pipeline_widget)
+        self.ui.viewTabWidget.addTab(pipeline_widget, "Pipeline")
         self.current_view_index = 0
         self.ui.viewTabWidget.currentChanged.connect(self.change_view)
 
@@ -163,7 +167,7 @@ class MuSeqAnnotator(QApplication):
             _3d_part = DLT.DLTrecon(3, num_views, dlt_coefficients, _2d_parts)
             reprojected_parts = DLT.DLTdecon(self.dlt_coefficients, _3d_part, 3, self.dlt_coefficients.shape[0])
             for i in range(len(list_of_views)):
-                original_part = self.views[i].video_player.data_store.get_marker(frame_number, part)
+                original_part = self.views[i].video_player.data_store.get_part(frame_number, part)
                 original_part[:2] = reprojected_parts[0][i * 2:i * 2 + 2]
                 original_part.likelihood = self.config.threshold
                 self.views[i].video_player.data_point[part] = original_part
@@ -177,7 +181,7 @@ class MuSeqAnnotator(QApplication):
 
 def launch_gui():
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
-    app = MuSeqAnnotator(sys.argv)
+    app = MuSeqPoseKit(sys.argv)
     sys.exit(app.exec_())
 
 

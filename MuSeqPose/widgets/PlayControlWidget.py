@@ -4,7 +4,7 @@ from PySide2.QtCore import QFile, QTimer, Signal
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QWidget
 
-from MuSeqPose.config import MuSeqPoseConfig
+from MuSeqPose.utils.session_manager import SessionManager
 
 
 class MetaClass(type(QWidget), type(ABC)):
@@ -14,9 +14,10 @@ class MetaClass(type(QWidget), type(ABC)):
 class PlayControlWidget(QWidget, ABC, metaclass=MetaClass):
     update_status = Signal(str)
 
-    def __init__(self, config: MuSeqPoseConfig, ui_file, threshold=0.6, parent=None):
+    def __init__(self, session_manager: SessionManager, ui_file, threshold=0.6, parent=None):
         super(PlayControlWidget, self).__init__(parent)
-        self.config = config
+        self.config = session_manager.config
+        self.session_manager = session_manager
         self.threshold = threshold
         self.frame_number = 0
         self.is_video_playing = False

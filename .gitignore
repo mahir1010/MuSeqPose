@@ -5,4 +5,4 @@ dist
 **/*.yml
 **/__pycache__
 *.pyc
-
+reinstall.sh

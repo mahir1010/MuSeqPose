@@ -1,13 +1,10 @@
-import os
-
 from PySide2.QtCore import QFile
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QDialog
 
 from MuSeqPose import get_resource
-from MuSeqPose.config import MuSeqPoseConfig
 from MuSeqPose.ui_Skeleton import Marker
-from MuSeqPose.utils.SessionFileManager import SessionFileManager
+from MuSeqPose.utils.session_manager import SessionManager
 from MuSeqPose.widgets.ImageViewer import AnnotationImageViewer
 
 
@@ -19,10 +16,10 @@ class AlignmentDialog(QDialog):
     ]
     KEYS = ['origin', 'x_max', 'y_max']
 
-    def __init__(self, parent, config: MuSeqPoseConfig, session_manager: SessionFileManager):
+    def __init__(self, parent, session_manager: SessionManager):
         super(AlignmentDialog, self).__init__(parent)
         self.frame_number = 0
-        self.config = config
+        self.config = session_manager.config
         self.session_manager = session_manager
         file = QFile(get_resource('AlignmentDialog.ui'))
         file.open(QFile.ReadOnly)
@@ -35,8 +32,8 @@ class AlignmentDialog(QDialog):
         self.ui.exit_btn.clicked.connect(self.close)
         self.max_frames = 0
         max_init = False
-        for index, view in enumerate(config.views):
-            if view not in config.annotation_views:
+        for index, view in enumerate(self.config.views):
+            if view not in self.config.annotation_views:
                 continue
             widget = AnnotationImageViewer()
             widget.draw_frame(session_manager.session_video_readers[view].random_access_image(self.frame_number))

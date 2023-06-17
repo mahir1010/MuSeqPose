@@ -33,10 +33,7 @@ class KeyPointController(QWidget):
         self.horizontalLayout.addWidget(self.visibility_checkbox)
 
         self.horizontalLayout.setStretch(1, 1)
-        # q_color = QColor.fromRgb(*color)
-        # palette = self.palette()
-        # palette.setColor(self.backgroundRole(), q_color)
-        # self.setPalette(palette)
+
         self.setStyleSheet(f"""QCheckBox::indicator::checked{{
                                 background-color:rgb({color[0]},{color[1]},{color[2]});
                                 }}

@@ -6,42 +6,48 @@ from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QDialog, QRadioButton, QMessageBox, QShortcut
 
 from MuSeqPose import get_resource
-from MuSeqPose.config import MuSeqPoseConfig
 from MuSeqPose.ui_Skeleton import Marker
-from MuSeqPose.utils.SessionFileManager import SessionFileManager
+from MuSeqPose.utils.session_manager import SessionManager
 from MuSeqPose.widgets.ImageViewer import AnnotationImageViewer
 from cvkit.pose_estimation import Part
 from cvkit.pose_estimation.reconstruction.EasyWand_tools import generate_EasyWand_data
+from cvkit.video_readers.image_sequence_reader import generate_image_sequence_reader
 
 
 class CalibrationDialog(QDialog):
 
-    def __init__(self, parent, config: MuSeqPoseConfig, session_manager: SessionFileManager, frame_indices):
+    def __init__(self, parent, session_manager: SessionManager, frame_indices):
         super().__init__(parent)
         self.frame_number = 0
         self.frame_indices = frame_indices
-        self.config = config
+        self.config = session_manager.config
         self.session_manager = session_manager
         file = QFile(get_resource('CalibrationWidget.ui'))
         file.open(QFile.ReadOnly)
         self.ui = QUiLoader().load(file)
+        self.setWindowTitle("MuSeqPose - Wand Calibration Widget")
+        self.video_readers = {}
         self.views = []
         self.widgets = []
         self.radio_btns = []
         self.ui.cancel.clicked.connect(self.close)
         self.ui.frameNumber.setText(f'{self.frame_number}/{len(self.frame_indices) - 1}')
         self.markers = {}
-        for part in config.body_parts:
+        for part in self.config.body_parts:
             self.radio_btns.append(QRadioButton(part))
             self.ui.keypointContainer.addWidget(self.radio_btns[-1])
-        for part in config.calibration_static_points:
+        for part in self.config.calibration_static_points:
             self.radio_btns.append(QRadioButton(part))
             self.ui.keypointContainer.addWidget(self.radio_btns[-1])
         self.radio_btns[0].setChecked(True)
-        for index, view in enumerate(config.views):
+        for index, view in enumerate(self.config.views):
             widget = AnnotationImageViewer()
-            widget.draw_frame(
-                session_manager.session_video_readers[view].random_access_image(self.frame_indices[self.frame_number]))
+            source_reader = session_manager.session_video_readers[view]
+            self.video_readers[view] = generate_image_sequence_reader(source_reader.video_path,
+                                                                      source_reader.fps, frame_indices,
+                                                                      os.path.join(self.config.output_folder,
+                                                                                   'calibration', 'candidates', view))
+            widget.draw_frame(self.video_readers[view].random_access_image(self.frame_number))
             self.views.append(view)
             widget.select_keypoint.connect(self.change_keypoint)
             widget.modify_keypoint.connect(self.annotate)
@@ -52,9 +58,9 @@ class CalibrationDialog(QDialog):
                 self.markers[view].append(Marker(i, 0, 0, 4, 4, color=self.config.colors[i]))
                 widget.scene.addItem(self.markers[view][-1])
                 self.markers[view][-1].setVisible(True)
-            for i in range(config.num_parts, len(self.radio_btns)):
-                pos = config.calibration_static_point_locations[view][
-                    config.calibration_static_points[i - config.num_parts]]
+            for i in range(self.config.num_parts, len(self.radio_btns)):
+                pos = self.config.calibration_static_point_locations[view][
+                    self.config.calibration_static_points[i - self.config.num_parts]]
                 self.markers[view][i].setX(pos[0] - 2)
                 self.markers[view][i].setY(pos[1] - 2)
 
@@ -118,12 +124,15 @@ class CalibrationDialog(QDialog):
         self.ui.frameNumber.setText(
             f'{self.frame_number}/{len(self.frame_indices)} :{self.frame_indices[self.frame_number]} ')
         for i, view in enumerate(self.views):
-            self.widgets[i].draw_frame(
-                self.session_manager.session_video_readers[view].random_access_image(
-                    self.frame_indices[self.frame_number]))
+            self.widgets[i].draw_frame(self.video_readers[view].random_access_image(self.frame_number))
             for index, part in enumerate(self.config.body_parts):
-                pos = self.session_manager.session_data_readers[view].get_marker(self.frame_indices[self.frame_number],
-                                                                                 part)
+                pos = self.session_manager.session_data_readers[view].get_part(self.frame_indices[self.frame_number],
+                                                                               part)
                 self.markers[view][index].setX(int(pos[0] - 2))
                 self.markers[view][index].setY(int(pos[1] - 2))
                 self.markers[view][index].update()
+
+    def close(self):
+        for reader in self.video_readers.values():
+            reader.release()
+        super().close()

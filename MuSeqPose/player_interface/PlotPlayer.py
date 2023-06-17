@@ -6,10 +6,12 @@ from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from vispy.scene import SceneCanvas, cameras, XYZAxis, Plane
 from vispy.scene.visuals import LinePlot, Box
+from vispy.visuals.filters.mesh import ShadingFilter
 from vispy.visuals.transforms import STTransform
 
-from MuSeqPose.config import PlotConfig, MuSeqPoseConfig, ReconstructionPlotConfig, LinePlotConfig
+from MuSeqPose.config import PlotConfig, ReconstructionPlotConfig, LinePlotConfig
 from MuSeqPose.player_interface.PlayerInterface import PlayerInterface
+from MuSeqPose.utils.session_manager import SessionManager
 from cvkit.pose_estimation.data_readers import initialize_datastore_reader
 from cvkit.pose_estimation.utils import get_spherical_coordinates
 
@@ -28,6 +30,10 @@ def get_visual(data):
     elif data['type'] == "Box":
         visual = Box(width=data.get('width', 1), height=data.get('height', 1), depth=data.get('depth', 1),
                      color=data.get('color', (0.8, 0, 0)))
+        visual._mesh.shading_filter = ShadingFilter(shading='smooth', ambient_light=(1, 1, 1, 0.55),
+                                                    diffuse_light=(1, 1, 1, 0.7), specular_light=(1, 1, 1, 0.35))
+        visual._mesh.attach(visual._mesh.shading_filter)
+        visual._mesh.shading = 'smooth'
         translate = data.get('translate', translate).copy()
         translate[0] += data.get('width', 1) / 2
         translate[1] += data.get('depth', 1) / 2
@@ -51,10 +57,10 @@ class PlotPlayer(PlayerInterface, ABC):
     def get_number_of_frames(self):
         return len(self.data_store)
 
-    def __init__(self, config: MuSeqPoseConfig, view_data: PlotConfig):
-        super(PlotPlayer, self).__init__(config, view_data)
-        columns = view_data.annotation_columns if view_data.annotation_columns is not None else config.body_parts
-        path = os.path.join(config.output_folder, view_data.annotation_file)
+    def __init__(self, session_manager: SessionManager, view_name, view_data: PlotConfig):
+        super(PlotPlayer, self).__init__(session_manager, view_name, view_data)
+        columns = view_data.annotation_columns if view_data.annotation_columns is not None else self.config.body_parts
+        path = os.path.join(self.config.output_folder, view_data.annotation_file)
         self.data_store = initialize_datastore_reader(columns, path, view_data.annotation_file_flavor)
         self.scene_canvas = None
 
@@ -72,8 +78,8 @@ class LinePlotPlayer(PlotPlayer):
             self.data[key].clear()
         self.axis.set_xlim((self.frame_number, self.frame_number + self.x_width))
 
-    def __init__(self, config: MuSeqPoseConfig, view_data: LinePlotConfig):
-        super(LinePlotPlayer, self).__init__(config, view_data)
+    def __init__(self, session_manager: SessionManager, view_name, view_data: LinePlotConfig):
+        super(LinePlotPlayer, self).__init__(session_manager, view_name, view_data)
         size = view_data.size
         self.scene_canvas = FigureCanvasQTAgg(Figure())
         self.scene_canvas.setFixedSize(*size)
@@ -106,8 +112,8 @@ class LinePlotPlayer(PlotPlayer):
 
 class ReconstructionPlayer(PlotPlayer):
 
-    def __init__(self, config: MuSeqPoseConfig, view_data: ReconstructionPlotConfig):
-        super(ReconstructionPlayer, self).__init__(config, view_data)
+    def __init__(self, session_manager: SessionManager, view_name, view_data: ReconstructionPlotConfig):
+        super(ReconstructionPlayer, self).__init__(session_manager, view_name, view_data)
         size = view_data.size
         self.max_limits = view_data.normalization_max_limit
         self.min_limits = view_data.normalization_min_limit
@@ -120,7 +126,7 @@ class ReconstructionPlayer(PlotPlayer):
         self.markers = {}
         self.lines = []
         self.line = LinePlot(np.zeros((self.config.num_parts, 3)), width=2, color=view_data.color, parent=view.scene,
-                             connect=np.array([[0, 1]]), marker_size=4)
+                             connect=np.array([[0, 1]]), marker_size=4, symbol='o', edge_width=2, face_color='white')
         self.scene_canvas.freeze()
         for item in view_data.environment.values():
             view.add(get_visual(item))

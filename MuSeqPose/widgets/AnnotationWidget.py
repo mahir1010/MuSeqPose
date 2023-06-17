@@ -3,9 +3,9 @@ from datetime import timedelta
 from PySide2.QtCore import QTimer, Signal
 from PySide2.QtWidgets import QVBoxLayout, QButtonGroup, QCheckBox, QMessageBox
 
-from MuSeqPose.config import MuSeqPoseConfig
 from MuSeqPose.player_interface import VideoPlayer
 from MuSeqPose.ui_Skeleton import SkeletonController
+from MuSeqPose.utils.session_manager import SessionManager
 from MuSeqPose.widgets.ImageViewer import AnnotationImageViewer
 from MuSeqPose.widgets.PlayControlWidget import PlayControlWidget
 from MuSeqPose.widgets.ui_KeyPoint import KeyPointController
@@ -17,9 +17,10 @@ class AnnotationWidget(PlayControlWidget):
     def update_frame_number(self):
         self.frame_number = self.video_player.frame_number
 
-    def __init__(self, view_name: str, config: MuSeqPoseConfig, ui_file, video_player: VideoPlayer, threshold=0.6,
+    def __init__(self, view_name: str, session_manager: SessionManager, ui_file, video_player: VideoPlayer,
+                 threshold=0.6,
                  parent=None):
-        super(AnnotationWidget, self).__init__(config, ui_file, threshold, parent)
+        super(AnnotationWidget, self).__init__(session_manager, ui_file, threshold, parent)
         self.view_name = view_name
         self.video_player = video_player
         layout = QVBoxLayout()
@@ -77,7 +78,7 @@ class AnnotationWidget(PlayControlWidget):
         self.behaviour_button_group.idToggled.connect(self.set_behaviour)
         self.interp_button_group.idToggled.connect(self.interp_set_candidate)
         self.current_keypoint = self.keypoint_list[0]
-        self.video_player.data_point_drawer = SkeletonController(self.config)
+        self.video_player.data_point_drawer = SkeletonController(self.session_manager, threshold)
         self.annotation_button_group.idToggled.connect(self.change_keypoint)
         self.visibility_button_group.idToggled.connect(self.set_keypoint_likelihood)
         self.current_keypoint.annotation_radio_button.setChecked(True)
@@ -242,8 +243,8 @@ class AnnotationWidget(PlayControlWidget):
         if total_frames < 2:
             return
         for name in self.interp_candidate_set:
-            part_initial = self.video_player.data_store.get_marker(self.interp_initial_index_frame, name)
-            part_current = self.video_player.data_store.get_marker(self.frame_number, name)
+            part_initial = self.video_player.data_store.get_part(self.interp_initial_index_frame, name)
+            part_current = self.video_player.data_store.get_part(self.frame_number, name)
             additive_coordinates = (part_current - part_initial) / total_frames
             for i in range(self.interp_initial_index_frame, self.frame_number):
                 self.video_player.data_store.set_part(i, part_initial)

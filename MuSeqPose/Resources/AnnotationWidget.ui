@@ -72,7 +72,7 @@
                                 </size>
                             </property>
                             <property name="currentIndex">
-                                <number>1</number>
+                                <number>2</number>
                             </property>
                             <property name="tabSpacing">
                                 <number>6</number>
@@ -82,8 +82,8 @@
                                     <rect>
                                         <x>0</x>
                                         <y>0</y>
-                                        <width>200</width>
-                                        <height>519</height>
+                                        <width>96</width>
+                                        <height>159</height>
                                     </rect>
                                 </property>
                                 <attribute name="label">
@@ -120,8 +120,8 @@
                                                             <rect>
                                                                 <x>0</x>
                                                                 <y>0</y>
-                                                                <width>194</width>
-                                                                <height>329</height>
+                                                                <width>96</width>
+                                                                <height>26</height>
                                                             </rect>
                                                         </property>
                                                         <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -162,8 +162,8 @@
                                                             <rect>
                                                                 <x>0</x>
                                                                 <y>0</y>
-                                                                <width>194</width>
-                                                                <height>163</height>
+                                                                <width>188</width>
+                                                                <height>46</height>
                                                             </rect>
                                                         </property>
                                                         <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -194,8 +194,8 @@
                                     <rect>
                                         <x>0</x>
                                         <y>0</y>
-                                        <width>200</width>
-                                        <height>519</height>
+                                        <width>216</width>
+                                        <height>495</height>
                                     </rect>
                                 </property>
                                 <attribute name="label">
@@ -227,8 +227,8 @@
                                                     <rect>
                                                         <x>0</x>
                                                         <y>0</y>
-                                                        <width>196</width>
-                                                        <height>338</height>
+                                                        <width>212</width>
+                                                        <height>322</height>
                                                     </rect>
                                                 </property>
                                                 <layout class="QVBoxLayout" name="verticalLayout_6">
@@ -318,7 +318,7 @@
                                         <x>0</x>
                                         <y>0</y>
                                         <width>200</width>
-                                        <height>519</height>
+                                        <height>509</height>
                                     </rect>
                                 </property>
                                 <attribute name="label">
@@ -341,7 +341,17 @@
                                         <number>0</number>
                                     </property>
                                     <item>
-                                        <layout class="QVBoxLayout" name="verticalLayout" stretch="1,0,1">
+                                        <layout class="QVBoxLayout" name="verticalLayout" stretch="0,1,0,0,1">
+                                            <item>
+                                                <widget class="QLabel" name="label_2">
+                                                    <property name="text">
+                                                        <string>Body Part</string>
+                                                    </property>
+                                                    <property name="alignment">
+                                                        <set>Qt::AlignCenter</set>
+                                                    </property>
+                                                </widget>
+                                            </item>
                                             <item>
                                                 <widget class="QScrollArea" name="scrollArea_4">
                                                     <property name="frameShadow">
@@ -356,7 +366,7 @@
                                                                 <x>0</x>
                                                                 <y>0</y>
                                                                 <width>194</width>
-                                                                <height>222</height>
+                                                                <height>190</height>
                                                             </rect>
                                                         </property>
                                                         <layout class="QHBoxLayout" name="horizontalLayout">
@@ -390,6 +400,16 @@
                                                 </spacer>
                                             </item>
                                             <item>
+                                                <widget class="QLabel" name="label_3">
+                                                    <property name="text">
+                                                        <string>Source Views</string>
+                                                    </property>
+                                                    <property name="alignment">
+                                                        <set>Qt::AlignCenter</set>
+                                                    </property>
+                                                </widget>
+                                            </item>
+                                            <item>
                                                 <widget class="QScrollArea" name="scrollArea_5">
                                                     <property name="frameShadow">
                                                         <enum>QFrame::Plain</enum>
@@ -403,7 +423,7 @@
                                                                 <x>0</x>
                                                                 <y>0</y>
                                                                 <width>194</width>
-                                                                <height>221</height>
+                                                                <height>189</height>
                                                             </rect>
                                                         </property>
                                                         <layout class="QVBoxLayout" name="verticalLayout_13">

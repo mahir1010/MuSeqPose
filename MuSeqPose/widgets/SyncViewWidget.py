@@ -3,8 +3,8 @@ import math
 from PySide2.QtCore import QTimer
 from PySide2.QtWidgets import QVBoxLayout
 
-from MuSeqPose.config import MuSeqPoseConfig
 from MuSeqPose.player_interface.PlotPlayer import PlotPlayer
+from MuSeqPose.utils.session_manager import SessionManager
 from MuSeqPose.widgets.ImageViewer import ImageViewer
 from MuSeqPose.widgets.PlayControlWidget import PlayControlWidget
 
@@ -53,8 +53,8 @@ class SyncViewWidget(PlayControlWidget):
             self.ui.nextFrameButton.setEnabled(False)
             self.ui.prevFrameButton.setEnabled(False)
 
-    def __init__(self, config: MuSeqPoseConfig, ui_file, video_players, threshold=0.6, parent=None):
-        super(SyncViewWidget, self).__init__(config, ui_file, threshold, parent)
+    def __init__(self, session_manager: SessionManager, ui_file, video_players, threshold=0.6, parent=None):
+        super(SyncViewWidget, self).__init__(session_manager, ui_file, threshold, parent)
         self.video_players = video_players
         self.image_viewers = []
         self.frame_number = 0

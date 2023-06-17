@@ -28,6 +28,9 @@
                 QLineEdit,QSlider, QScrollArea, QProgressBar,QSpinBox,QDoubleSpinBox{
                 border:1px solid rgb(40,40,40);
                 }
+                QLineEdit:focus{
+                border: 1px solid rgb(14, 77, 179);
+                }
                 QCheckBox::indicator{
                 border:2px solid rgb(40,40,40);
                 }

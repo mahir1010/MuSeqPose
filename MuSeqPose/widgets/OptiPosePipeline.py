@@ -3,29 +3,28 @@ import os
 from PySide2.QtCore import QFile, Qt, QRegExp
 from PySide2.QtGui import QRegExpValidator
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import QCheckBox, QWidget, QHBoxLayout, QMessageBox
+from PySide2.QtWidgets import QCheckBox, QWidget, QMessageBox
 
 from MuSeqPose import get_resource
-from MuSeqPose.config import MuSeqPoseConfig
-from MuSeqPose.utils.PostProcessorThread import Thread
-from MuSeqPose.utils.SessionFileLoader import SessionFileLoader
-from MuSeqPose.utils.SessionFileManager import SessionFileManager
+from MuSeqPose.utils.processor_thread import ProcessorThread
+from MuSeqPose.utils.session_manager import SessionManager
+from MuSeqPose.utils.ui_generators import SessionFileLoader
 from MuSeqPose.widgets.AlignmentWidget import AlignmentDialog
 from MuSeqPose.widgets.HeadingAnalysisWidget import HeadingAnalysisWidget
-from MuSeqPose.widgets.OptiPoseCard import OptiPoseCard
-from cvkit.pose_estimation.post_processors.filter import *
-from cvkit.pose_estimation.post_processors.generative import *
-from cvkit.pose_estimation.post_processors.util import *
+from MuSeqPose.widgets.OperationCardWidget import OperationCard
+from cvkit.pose_estimation.processors.filter import *
+from cvkit.pose_estimation.processors.generative import *
+from cvkit.pose_estimation.processors.util import *
 from cvkit.pose_estimation.reconstruction.EasyWand_tools import update_alignment_matrices
 
 
 class OptiPoseWidget(QWidget):
-    def __init__(self, config: MuSeqPoseConfig, session_manager: SessionFileManager):
+    def __init__(self, session_manager: SessionManager):
         super(OptiPoseWidget, self).__init__(parent=None)
         file = QFile(get_resource('OptiPosePipeline.ui'))
         file.open(QFile.ReadOnly)
         self.ui = QUiLoader().load(file)
-        self.config = config
+        self.config = session_manager.config
         self.session_manager = session_manager
         self.view_checkboxes = []
         self.alignment_view_checkbox = []
@@ -47,11 +46,8 @@ class OptiPoseWidget(QWidget):
         self.ui.file_loader_container.addWidget(self.file_loader)
         self.ui.recon_algorithm.addItems(['default', 'auto_subset'])
         self.ui.recon_algorithm.setCurrentIndex(1)
-        layout = QHBoxLayout()
-        layout.setMargin(0)
-        layout.addWidget(self.ui)
-        self.setLayout(layout)
-        self.ui.axes_annotation_btn.clicked.connect(lambda x: AlignmentDialog(self, config, session_manager))
+        self.setLayout(self.ui.layout())
+        self.ui.axes_annotation_btn.clicked.connect(lambda x: AlignmentDialog(self, self.config, session_manager))
         self.ui.alignment_matrix_btn.clicked.connect(self.update_alignment_data)
         self.ui.recon_scale.setText(str(self.config.computed_scale))
         self.ui.recon_threshold.setValue(self.config.threshold)
@@ -69,8 +65,7 @@ class OptiPoseWidget(QWidget):
         self.ui.add_interp_btn.clicked.connect(self.insert_interpolation_process)
         self.ui.add_kalman_btn.clicked.connect(self.insert_kalman_filter_process)
         self.ui.add_moving_avg.clicked.connect(self.insert_moving_avg_process)
-        self.ui.analysis_widget.addTab(HeadingAnalysisWidget(config).ui, "Heading")
-        self.show()
+        self.ui.analysis_widget.addTab(HeadingAnalysisWidget(self.config).ui, "Heading")
 
     def start_pipeline(self, event=None):
         if not self.ui.output_file_name.hasAcceptableInput():
@@ -83,8 +78,8 @@ class OptiPoseWidget(QWidget):
                                           QMessageBox.Yes, QMessageBox.No)
             if btn == QMessageBox.No:
                 return
-        post_processor = SaveFile(path)
-        self.generate_process_card([post_processor])
+        processor = SaveFile(path)
+        self.generate_process_card([processor])
         self.execute_pipeline()
 
     def update_alignment_data(self, event=None):
@@ -108,7 +103,7 @@ class OptiPoseWidget(QWidget):
                 QMessageBox.warning(self.ui, "Error", 'Custom File not Loaded.\n' +
                                     'You can select reconstruction option to generate new file')
                 return
-            post_processor = LoadFile(self.file_loader.file)
+            processor = LoadFile(self.file_loader.file)
 
         else:
             candidate_views = [cb.text() for cb in self.view_checkboxes if cb.isChecked()]
@@ -120,13 +115,13 @@ class OptiPoseWidget(QWidget):
             for candidate in candidate_views:
                 data_readers.append(self.session_manager.session_data_readers[candidate])
                 source_views.append(candidate)
-            post_processor = DLTReconstruction(self.config, source_views, data_readers,
-                                               self.ui.recon_threshold.value(),
-                                               scale=float(self.ui.recon_scale.text()),
-                                               reconstruction_algorithm=self.ui.recon_algorithm.currentText())
+            processor = DLTReconstruction(self.config, source_views, data_readers,
+                                          self.ui.recon_threshold.value(),
+                                          scale=float(self.ui.recon_scale.text()),
+                                          reconstruction_algorithm=self.ui.recon_algorithm.currentText())
             file_name = f"{self.ui.recon_file_prefix.text()}_{self.ui.recon_threshold.value()}_{'_'.join([view for view in source_views]) if self.ui.recon_algorithm.currentText() != 'auto_subset' else 'auto_subset'}"
             self.ui.output_file_name.setText(file_name)
-        self.generate_process_card([post_processor])
+        self.generate_process_card([processor])
 
     def execute_pipeline(self):
         args = None
@@ -149,8 +144,8 @@ class OptiPoseWidget(QWidget):
             QMessageBox.warning(self.ui, "Error", "Invalid median distance")
             return
         threshold = self.ui.median_threshold.value()
-        post_processor = MedianDistanceFilter(threshold, distance_threshold)
-        self.generate_process_card([post_processor])
+        processor = MedianDistanceFilter(threshold, distance_threshold)
+        self.generate_process_card([processor])
 
     def insert_interpolation_process(self, event):
         try:
@@ -165,12 +160,12 @@ class OptiPoseWidget(QWidget):
             QMessageBox.warning(self.ui, "Error", "Invalid cluster size")
             return
         threshold = self.ui.interp_threshold.value()
-        cluster_post_processor = ClusterAnalysis(threshold)
-        self.generate_process_card([cluster_post_processor])
-        post_processors = []
+        cluster_processor = ClusterAnalysis(threshold)
+        self.generate_process_card([cluster_processor])
+        processors = []
         for column in self.config.body_parts:
-            post_processors.append(LinearInterpolationFilter(column, threshold, max_cluster_size))
-        self.generate_process_card(post_processors)
+            processors.append(LinearInterpolationFilter(column, threshold, max_cluster_size))
+        self.generate_process_card(processors)
 
     def insert_moving_avg_process(self, event):
         try:
@@ -185,25 +180,25 @@ class OptiPoseWidget(QWidget):
             QMessageBox.warning(self.ui, "Error", "Invalid Window size")
             return
         threshold = self.ui.moving_avg_threshold.value()
-        post_processors = []
+        processors = []
         for column in self.config.body_parts:
-            post_processors.append(MovingAverageFilter(column, window_size, threshold))
-        self.generate_process_card(post_processors)
+            processors.append(MovingAverageFilter(column, window_size, threshold))
+        self.generate_process_card(processors)
 
     def insert_kalman_filter_process(self, event):
         threshold = self.ui.kalman_threshold.value()
         skip_invalid = self.ui.kalman_skip_invalids.isChecked()
-        post_processors = []
+        processors = []
         for column in self.config.body_parts:
-            post_processors.append(
+            processors.append(
                 KalmanFilter(column, self.config.framerate, skip_invalid, threshold))
-        self.generate_process_card(post_processors)
+        self.generate_process_card(processors)
 
-    def generate_process_card(self, post_processors: list):
+    def generate_process_card(self, processors: list):
         threads = []
-        for idx, post_processor in enumerate(post_processors):
-            threads.append(Thread(idx, post_processor))
-        card = OptiPoseCard(threads)
+        for idx, processor in enumerate(processors):
+            threads.append(ProcessorThread(idx, processor))
+        card = OperationCard(threads)
         card.execution_completed.connect(self.execute_pipeline)
         self.operation_list.append(card)
         self.ui.pipeline_container.insertWidget(len(self.operation_list), card)

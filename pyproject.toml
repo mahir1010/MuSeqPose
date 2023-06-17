@@ -3,12 +3,12 @@ requires = ["setuptools>=67.0"]
 build-backend = "setuptools.build_meta"
 [project]
 name = "MuSeqPose"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
-  { name="Mahir Patel", email="mahirp@bu.edu" },
+    { name = "Mahir Patel", email = "mahirp@bu.edu" },
 ]
 description = "A toolkit to reconstruct,post-process, and analyze 3D Poses"
-requires-python = ">=3.10"
+requires-python = ">=3.10,<3.11"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",

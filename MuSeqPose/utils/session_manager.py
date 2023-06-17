@@ -1,9 +1,10 @@
 from MuSeqPose.config import MuSeqPoseConfig
 
 
-class SessionFileManager:
+class SessionManager:
 
     def __init__(self, config: MuSeqPoseConfig):
+        self.config = config
         self.session_video_readers = {}
         self.session_data_readers = {}
         for view in config.views:

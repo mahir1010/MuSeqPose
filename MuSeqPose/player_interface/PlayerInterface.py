@@ -1,12 +1,14 @@
 from abc import ABC, abstractmethod
 
-from MuSeqPose.config import MuSeqPoseConfig
+from MuSeqPose.utils.session_manager import SessionManager
 
 
 class PlayerInterface(ABC):
 
-    def __init__(self, config: MuSeqPoseConfig, view_data):
-        self.config = config
+    def __init__(self, session_manager: SessionManager, view_name, view_data):
+        self.config = session_manager.config
+        self.session_manager = session_manager
+        self.view_name = view_name
         self.view_data = view_data
         self.data_store = None
         self.frame_number = 0

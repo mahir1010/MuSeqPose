@@ -1,3 +1,8 @@
+import glob
+import json
+import os
+from pathlib import Path
+
 from cvkit.pose_estimation.config import PoseEstimationConfig
 
 
@@ -53,6 +58,17 @@ class MuSeqPoseConfig(PoseEstimationConfig):
 
     def __init__(self, path):
         super(MuSeqPoseConfig, self).__init__(path)
+        self.pipeline_directory = self.data_dictionary.get('pipeline_directory', '')
+        if not os.path.exists(self.pipeline_directory):
+            self.pipeline_directory = self.output_folder
+        self.loaded_pipelines = {}
+        pipelines = glob.glob(os.path.join(self.pipeline_directory, '*.pipeline'))
+        for pipeline in pipelines:
+            try:
+
+                self.loaded_pipelines[Path(pipeline).stem] = json.load(open(pipeline))
+            except:
+                pass
         self.sync_views = self.data_dictionary.get('sync_views', [])
         self.calibration_toolbox_enabled = self.data_dictionary.get('calibration_toolbox', {}).get('enabled', False)
         self.calibration_static_points = []
@@ -92,6 +108,7 @@ class MuSeqPoseConfig(PoseEstimationConfig):
         data_dict['sync_views'] = self.sync_views
         data_dict['reprojection_toolbox'] = self.reprojection_toolbox_enabled
         data_dict['behaviours'] = self.behaviours
+        data_dict['pipeline_directory'] = self.pipeline_directory
         data_dict['calibration_toolbox'] = {'enabled': self.calibration_toolbox_enabled}
         data_dict['calibration_toolbox']['static_points'] = self.calibration_static_points
         data_dict['calibration_toolbox']['views'] = {
