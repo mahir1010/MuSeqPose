@@ -14,6 +14,8 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
+dependencies = ["bu-cvkit",
+    "vispy"]
 [tool.setuptools.package-data]
 "MuSeqPose.Resources" = ["*.ui"]
 [project.gui-scripts]
