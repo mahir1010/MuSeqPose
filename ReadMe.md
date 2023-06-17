@@ -74,3 +74,5 @@ This widget automatically picks candidate calibration frames such that the track
 - After verifying, the `Generate` button generates necessary files for the [EasyWand](https://biomech.web.unc.edu/wand-calibration-tools/) package.
 
 <p align="center"><img src="docs/images/calibration_widget.png"></p>
+
+### Documentation Coming Soon!
