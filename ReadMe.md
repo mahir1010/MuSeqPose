@@ -1,4 +1,4 @@
-<h1><span style="color:#cc0000;">Mu</span>ltiview <span style="color:#cc0000;">Seq</span>uential <span style="color:#cc0000;">Pose</span> Kit</h1>
+<h1><span style="color: #2D2926"><span style="color:#cc0000;">Mu</span>ltiview <span style="color:#cc0000;">Seq</span>uential <span style="color:#cc0000;">Pose</span> Kit</span></h1>
 
 It is a user interface for the pose estimation and tracking packages of our framework [BU-CVKit](https://mahir1010.github.io/BU-CVKit/).
 It automatically scans for installed plugins and programmatically generates an interface based on the metadata provided.
