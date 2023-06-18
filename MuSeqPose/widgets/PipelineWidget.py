@@ -143,6 +143,9 @@ class PipelineWidget(QWidget):
                 return
         data_dict = self.pipeline_manager.export_pipeline()
         json.dump(data_dict, open(path, 'w'))
+        self.config.loaded_pipelines[pipeline_name] = data_dict
+        if self.ui.pipeline_cb.findText(pipeline_name) < 0:
+            self.ui.pipeline_cb.addItem(pipeline_name)
         QMessageBox.information(self, 'Success', 'File Exported Successfully!')
 
     def load_pipeline(self, pipeline_name):

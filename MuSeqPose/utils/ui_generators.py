@@ -404,7 +404,7 @@ class ViewsField(BaseInputWidget):
         if self.metadata.min_val is None:
             self.metadata.min_val = 1
         if self.metadata.max_val is None:
-            self.metadata.max_val = 1
+            self.metadata.max_val = session_manager.config.num_parts
 
         self.flow_layout = FlowLayout()
         self._layout.addLayout(self.flow_layout, 1)
@@ -448,9 +448,9 @@ class FilePathField(BaseInputWidget):
     def load_file(self, event):
         self.file_path = QFileDialog.getSaveFileName(self, f"File Path",
                                                      self.config.output_folder, self.metadata.regex)[0]
-        self.value_changed.emit()
+
         if self.file_path:
-            self.file_btn.setText(self.file_path)
+            self.value_changed.emit()
 
     def reset_ui(self):
         self.file_path = None

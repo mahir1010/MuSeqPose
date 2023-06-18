@@ -8,6 +8,49 @@ from MuSeqPose.utils.session_manager import SessionManager
 from MuSeqPose.widgets.ProcessorCardWidget import ProcessorConfigurator
 
 
+class OperationStatusWidget(QWidget):
+    CONFIG_ERROR_CSS = "QPushButton{border: 2px solid #CC0000;}"
+
+    def __init__(self, configurator: ProcessorConfigurator):
+        super().__init__()
+        self.configurator = configurator
+        edit_icon = self.style().standardIcon(QStyle.SP_FileDialogDetailedView)
+        close_icon = self.style().standardIcon(QStyle.SP_DockWidgetCloseButton)
+        layout = QHBoxLayout()
+        layout.setMargin(5)
+        layout.setSpacing(10)
+        self.configurator_btn = QPushButton()
+        self.configurator_btn.setIcon(edit_icon)
+        # self.configurator_btn.clicked.connect(lambda x: self.edit_processor_card(configurator))
+        if not configurator.verify_data()[0]:
+            self.configurator_btn.setStyleSheet(configurator.styleSheet() + self.CONFIG_ERROR_CSS)
+        # configurator.accepted.connect(lambda: self.update_processor(configurator))
+        self.remove_btn = QPushButton()
+        self.remove_btn.setIcon(close_icon)
+        # self.remove_btn.clicked.connect(lambda x: self.remove_configurator(configurator))
+        self.remove_btn.setStyleSheet("QPushButton{border:none;}")
+        self.label = None
+        if 'target_column' in configurator.ui_map:
+            self.label = QLabel(configurator.ui_map['target_column'].get_output())
+            layout.addWidget(self.label, 1)
+            self.label.setFixedHeight(30)
+        self.bar = QProgressBar()
+        self.bar.setFixedHeight(30)
+        self.bar.setValue(0)
+        self.bar.setAlignment(Qt.AlignCenter)
+        self.bar.setMaximum(100)
+        # self.progress.append(False)
+        layout.addWidget(self.bar, 2)
+        layout.addWidget(self.configurator_btn, 0)
+        layout.addWidget(self.remove_btn, 0)
+        # self.ui.scrollArea.setMinimumWidth(layout.geometry().width())
+        # self.ui.progress_container.layout().addLayout(layout)
+        self.setLayout(layout)
+
+    def update_label(self,configurator):
+        if self.label is not None:
+            self.label.setText(configurator.ui_map['target_column'].get_output())
+
 class OperationCard(QWidget):
     delete_card = Signal()
     execution_completed = Signal()
@@ -36,8 +79,7 @@ class OperationCard(QWidget):
         self.exception_occurred = False
         self.exception_message = ''
         self.ui.title.setText(self.processor_configurators[0].target_processor.PROCESSOR_NAME)
-        self.progress_bars = []
-        self.configure_btns = []
+        self.operation_status_widgets = []
         self.adjustSize()
         for processor in self.processor_configurators:
             self.generate_processor_thread_ui(processor)
@@ -63,10 +105,13 @@ class OperationCard(QWidget):
             return
         processor_dialog = ProcessorConfigurator(self, self.session_manager,
                                                  self.processor_configurators[0].target_processor)
+        processor_dialog.accepted.disconnect()
         processor_dialog.accepted.connect(lambda: self.add_new_processor(processor_dialog))
         processor_dialog.open()
 
     def add_new_processor(self, dialog):
+        dialog.accepted.disconnect()
+        dialog.accepted.connect(lambda: self.update_processor(dialog))
         if dialog in self.processor_configurators:
             QMessageBox.warning(self.ui, 'Error', 'Processor already exists!')
             return
@@ -79,37 +124,14 @@ class OperationCard(QWidget):
         dialog.close()
 
     def generate_processor_thread_ui(self, configurator: ProcessorConfigurator):
-        edit_icon = self.style().standardIcon(QStyle.SP_FileDialogDetailedView)
-        layout = QHBoxLayout()
-        layout.setMargin(5)
-        layout.setSpacing(10)
-        configurator_btn = QPushButton()
-        configurator_btn.setIcon(edit_icon)
-        configurator_btn.clicked.connect(lambda x: self.edit_processor_card(configurator))
-        if not configurator.verify_data()[0]:
-            configurator_btn.setStyleSheet(configurator.styleSheet() + self.CONFIG_ERROR_CSS)
-        self.configure_btns.append(configurator_btn)
+        status_widget = OperationStatusWidget(configurator)
+
+        status_widget.configurator_btn.clicked.connect(lambda x: self.edit_processor_card(configurator))
         configurator.accepted.connect(lambda: self.update_processor(configurator))
-        remove_btn = QPushButton()
-        remove_btn.setIcon(self.close_icon)
-        remove_btn.clicked.connect(lambda x: self.remove_configurator(configurator))
-        remove_btn.setStyleSheet("QPushButton{border:none;}")
-        if 'target_column' in configurator.ui_map:
-            label = QLabel(configurator.ui_map['target_column'].get_output())
-            layout.addWidget(label, 1)
-            label.setFixedHeight(30)
-        bar = QProgressBar()
-        bar.setFixedHeight(30)
-        bar.setValue(0)
-        bar.setAlignment(Qt.AlignCenter)
-        bar.setMaximum(100)
-        self.progress_bars.append(bar)
         self.progress.append(False)
-        layout.addWidget(bar, 2)
-        layout.addWidget(configurator_btn, 0)
-        layout.addWidget(remove_btn, 0)
-        self.ui.scrollArea.setMinimumWidth(layout.geometry().width())
-        self.ui.progress_container.layout().addLayout(layout)
+        self.operation_status_widgets.append(status_widget)
+        self.ui.scrollArea.setMinimumWidth(status_widget.geometry().width()/2)
+        self.ui.progress_container.layout().addWidget(status_widget)
 
     def execute(self, processor_args):
         self.configurable = False
@@ -118,7 +140,7 @@ class OperationCard(QWidget):
             processor_thread = ProcessorThread(index, configurator.get_instance())
             self.processor_threads.append(processor_thread)
             processor_thread.set_args(processor_args)
-            processor_thread.signals.progress_update.connect(self.progress_bars[index].setValue)
+            processor_thread.signals.progress_update.connect(self.operation_status_widgets[index].bar.setValue)
             processor_thread.signals.process_complete.connect(self.sub_process_completed)
             self.threadpool.start(processor_thread)
 
@@ -130,7 +152,7 @@ class OperationCard(QWidget):
             self.progress[index] = False
         else:
             self.progress[index] = True
-            self.progress_bars[index].setValue(100)
+            self.operation_status_widgets[index].bar.setValue(100)
 
         self.processor_threads[index].signals.timer.stop()
         if all(self.progress):
@@ -153,13 +175,13 @@ class OperationCard(QWidget):
             return
         container_layout = self.ui.progress_container.layout()
         remove_item = container_layout.itemAt(index + 1)
-        for i in reversed(range(remove_item.count())):
-            remove_item.itemAt(i).widget().deleteLater()
+        # for i in reversed(range(remove_item.count())):
+        #     remove_item.itemAt(i).widget().deleteLater()
+        remove_item.deleteLater()
         container_layout.removeItem(remove_item)
         del self.processor_configurators[index]
-        del self.progress_bars[index]
+        del self.operation_status_widgets[index]
         del self.progress[index]
-        del self.configure_btns[index]
         container_layout.update()
 
     def edit_processor_card(self, configurator):
@@ -170,11 +192,16 @@ class OperationCard(QWidget):
     #
     def update_processor(self, configurator):
         is_valid, error = configurator.verify_data()
+        c = configurator == self.processor_configurators[0]
         if not is_valid:
             QMessageBox.warning(self.ui, 'Error', error)
             return
+        if sum([configurator==conf for conf in self.processor_configurators])!=1:
+            QMessageBox.warning(self,'Error',"Processor already exists!")
+            return
         index = self.processor_configurators.index(configurator)
-        self.configure_btns[index].setStyleSheet(configurator.styleSheet().replace(self.CONFIG_ERROR_CSS, ''))
+        self.operation_status_widgets[index].update_label(configurator)
+        self.operation_status_widgets[index].configurator_btn.setStyleSheet(configurator.styleSheet().replace(self.CONFIG_ERROR_CSS, ''))
         configurator.close()
 
     def set_css(self, css):
@@ -184,14 +211,14 @@ class OperationCard(QWidget):
         self.set_css('')
         self.exception_occurred = False
         self.exception_message = ''
-        for bar in self.progress_bars:
-            bar.setValue(0)
+        for widget in self.operation_status_widgets:
+            widget.bar.setValue(0)
         self.progress = [False] * len(self.progress)
 
     def verify_configurators(self):
         return_flag = True
         for idx, configurator in enumerate(self.processor_configurators):
             if not configurator.verify_data()[0]:
-                self.configure_btns[idx].setStyleSheet(configurator.styleSheet() + self.CONFIG_ERROR_CSS)
+                self.operation_status_widgets[idx].configurator_btn.setStyleSheet(configurator.styleSheet() + self.CONFIG_ERROR_CSS)
                 return_flag = False
         return return_flag
