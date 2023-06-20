@@ -3,6 +3,7 @@ import os
 import sys
 from random import randint
 
+import numpy as np
 from PySide2.QtCore import QFile, QCoreApplication, Qt
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QApplication, QFileDialog, QMessageBox
@@ -159,13 +160,14 @@ class MuSeqPoseKit(QApplication):
     def reproject(self, view_name, frame_number, view_candidates, part_candidates):
         list_of_views = list(self.config.views.keys())
         view_indices = [list_of_views.index(view) for view in view_candidates]
-        dlt_coefficients = self.dlt_coefficients[view_indices, :]
+        dlt_coefficients_superset = np.array([self.config.views[view].dlt_coefficients for view in list_of_views])
+        dlt_coefficients = dlt_coefficients_superset[view_indices, :]
         num_views = len(view_candidates)
         skeletons = [self.views[idx].video_player.data_store.get_skeleton(frame_number) for idx in view_indices]
         for part in part_candidates:
             _2d_parts = [sk[part] for sk in skeletons]
             _3d_part = DLT.DLTrecon(3, num_views, dlt_coefficients, _2d_parts)
-            reprojected_parts = DLT.DLTdecon(self.dlt_coefficients, _3d_part, 3, self.dlt_coefficients.shape[0])
+            reprojected_parts = DLT.DLTdecon(dlt_coefficients_superset, _3d_part, 3, dlt_coefficients_superset.shape[0])
             for i in range(len(list_of_views)):
                 original_part = self.views[i].video_player.data_store.get_part(frame_number, part)
                 original_part[:2] = reprojected_parts[0][i * 2:i * 2 + 2]
