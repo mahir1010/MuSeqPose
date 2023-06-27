@@ -2,7 +2,7 @@
 
 It is a user interface for the pose estimation and tracking packages of our framework [BU-CVKit](https://mahir1010.github.io/BU-CVKit/).
 It automatically scans for installed plugins and programmatically generates an interface based on the metadata provided.
-In addition, it supports standard pose estimation features such as pose and behavioral annotations, 3D reconstruction, reprojection, dynamic realtime plots, synchronized playback and camera calibration.
+In addition, it supports standard pose estimation features such as pose and behavioral annotations, 3D reconstruction, reprojection, dynamic real-time plots, synchronized playback, and camera calibration.
 
 <p><span style="color: #158219;font-weight: bold">Note: Video Tutorials will be added soon!</span></p>
 
@@ -11,7 +11,7 @@ In addition, it supports standard pose estimation features such as pose and beha
 $ conda create -n cvkit python=3.10 pyside=5.15.8 cudatoolkit
 $ conda activate cvkit
 
-#Follow from Steup 2: Tensorflow website https://www.tensorflow.org/install/pip#linux (linux configuration)
+#Follow from Step 2: Tensorflow website https://www.tensorflow.org/install/pip#linux (linux configuration)
 #Ignore version numbers
 
 $ pip install museqpose
@@ -35,18 +35,18 @@ The software generates an annotation widget for all annotation files defined in 
 <p align="center"><img src="docs/images/annotation_widget.png"></p>
 
 ### Pose and Behaviour Sub-Widget
-- The user can play the videos with dynamically generated skeleton. 
+- The user can play the videos with a dynamically generated skeleton. 
 - The viewer supports keyboard+mouse shortcuts.
   - `ctrl+scroll` to zoom in and out; `ctrl+drag` to pan.
   -  `left-click` on any marker to select; `scroll` to switch focus through all markers.
-  -  `lef-click+drag` to move selected marker.
-  -  `middle-mouse` to delete/un-delete selected marker. Invalid markers disappears and the corresponding checkbox gets unchecked.
-- Generates checkboxes for behaviours dynamically based on the configuration file.
-  - Checking a behaviour sets data at corresponding frame number in the underlying datastore.
-  - Selecting `Overwrite Next Frame` sets the selected behaviours to the next frame. This is useful to mark longer sequences of behaviours.
+  -  `lef-click+drag` to move the selected marker.
+  -  `middle-mouse` to delete/un-delete selected marker. Invalid markers disappear, and the corresponding checkbox gets unchecked.
+- Generates checkboxes for behaviors dynamically based on the configuration file.
+  - Checking a behavior sets data at the corresponding frame number in the underlying datastore.
+  - Selecting `Overwrite Next Frame` sets the selected behaviors to the next frame. This is useful to mark longer sequences of behaviors.
 ### Frame Interpolation Sub-Widget
 
-- Used for quickly annotating a sequence of frames by annotating sentinel frames and interpolating the data for the frames in-between.
+- Used for quickly annotating a sequence of frames by annotating sentinel frames and interpolating the data for the frames in between.
 - Users can select specific body parts for interpolation.
 - `Update Index` button is used to mark the first frame by updating the `Initial Index`.
 - `Interpolate` button interpolates selected parts for the frames between `Initial Index` and `Current Frame`.
@@ -61,8 +61,8 @@ The software generates an annotation widget for all annotation files defined in 
 
 ## Synchronized Playback Widget
 
-The Synchronized Playback Widget is generates multiple frame-synced streams of data as configured in the project file. It can include annotation videos and
-realtime reconstruction or line plots.
+The Synchronized Playback Widget generates multiple frame-synced streams of data as configured in the project file. It can include annotation videos and
+real-time reconstruction or line plots.
 
 <p align="center"><img src="docs/images/sync_view.png"></p>
 
@@ -73,7 +73,7 @@ realtime reconstruction or line plots.
 
 This widget provides an interface to the Processor modules of the BU-CVKit framework. 
 - Based on the metadata provided by the plugin developers, a form is dynamically generated for all available processors.
-- Users can create a pipeline that performs a semantically meaningful computation such as interpolating missing data for input datastore as shown in the figure.
+- Users can create a pipeline that performs a semantically meaningful computation, such as interpolating missing data for input datastore, as shown in the figure.
 - This pipeline can be exported and shared with the community. Although this is a simple example, users can create complex pipelines.
 - The pipeline interface dynamically changes colors to indicate the current status of the execution.
   - Green : Processor Execution Completed
@@ -86,9 +86,9 @@ This widget provides an interface to the Processor modules of the BU-CVKit frame
 
 This widget automatically picks candidate calibration frames such that the tracked parts are visible in all views. The initial annotation can be generated by a [DeepLabCut](https://github.com/DeepLabCut/DeepLabCut) project.
 - The widget uses binning algorithm to ensure diversity in selected candidate calibration images.
-- The users can varify the pre-annotated frames and add stationary points (Refer [EasyWand](https://biomech.web.unc.edu/wand-calibration-tools/)).
-- The stationary points are common across all frames and neet to be annotated only once.
-- After verifying, the `Generate` button generates necessary files for the [EasyWand](https://biomech.web.unc.edu/wand-calibration-tools/) package.
+- The users can verify the pre-annotated frames and add stationary points (Refer [EasyWand](https://biomech.web.unc.edu/wand-calibration-tools/)).
+- The stationary points are common across all frames and need to be annotated only once.
+- After verifying, the `Generate` button generates the necessary files for the [EasyWand](https://biomech.web.unc.edu/wand-calibration-tools/) package.
 
 <p align="center"><img src="docs/images/calibration_widget.png"></p>
 
