@@ -8,7 +8,7 @@ In addition, it supports standard pose estimation features such as pose and beha
 
 ## Installation
 ```shell
-$ conda create -n cvkit python=3.10 pyside=5.15.8 cudatoolkit
+$ conda create -n cvkit python=3.10 pyside2=5.15.8 cudatoolkit
 $ conda activate cvkit
 
 #Follow from Step 2: Tensorflow website https://www.tensorflow.org/install/pip#linux (linux configuration)
