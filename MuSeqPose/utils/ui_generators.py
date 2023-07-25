@@ -127,7 +127,7 @@ class IntField(BaseInputWidget):
             self.input_field.setText(str(metadata.default))
         self.setToolTip(metadata.tooltip)
         self._layout.addWidget(self.input_field)
-        self.input_field.editingFinished.connect(lambda x: self.value_changed.emit())
+        self.input_field.editingFinished.connect(lambda : self.value_changed.emit())
 
     def reset_ui(self):
         if self.metadata.default is not None:

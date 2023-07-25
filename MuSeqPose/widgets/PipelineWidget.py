@@ -5,12 +5,12 @@ import shutil
 from copy import copy
 from os.path import exists, join
 
-from PySide2.QtCore import QFile, QSortFilterProxyModel, QRegExp
+from PySide2.QtCore import QFile, QSortFilterProxyModel, QRegExp, QSize
 from PySide2.QtGui import QStandardItem, QStandardItemModel, QRegExpValidator, QIcon
 from PySide2.QtUiTools import QUiLoader
 from PySide2.QtWidgets import QWidget, QMessageBox, QFileDialog
 
-from MuSeqPose import get_resource
+from MuSeqPose import get_resource, get_icon
 from MuSeqPose.utils.pipeline_execution_manager import PipelineExecutionManager, verify_import
 from MuSeqPose.utils.session_manager import SessionManager
 from MuSeqPose.widgets.OperationCardWidget import OperationCard
@@ -75,6 +75,10 @@ class PipelineWidget(QWidget):
         self.setLayout(self.ui.layout())
         self.pipeline_chain_layout = self.ui.pipeline_container.layout()
         self.ui.add_processor_btn.clicked.connect(self.register_processor)
+        self.ui.add_processor_btn.setIcon(get_icon('add.svg'))
+        self.ui.import_pipeline_btn.setIcon(get_icon('import.svg'))
+        self.ui.export_pipeline_btn.setIcon(get_icon('export.svg'))
+        self.ui.pipeline_execute_btn.setIcon(get_icon('play.svg',color=[0,200,50]))
         self.ui.pipeline_execute_btn.clicked.connect(self.execute_pipeline)
         self.pipeline_manager = PipelineExecutionManager(self.session_manager)
         self.ui.export_pipeline_btn.clicked.connect(self.export_pipeline)
