@@ -5,6 +5,10 @@ from pathlib import Path
 
 from cvkit.pose_estimation.config import PoseEstimationConfig
 
+ADDITIONAL_ENABLE_FLOW_STYLE = ['pipeline_directory']
+for key in ADDITIONAL_ENABLE_FLOW_STYLE:
+    if key not in PoseEstimationConfig.ENABLE_FLOW_STYLE:
+        PoseEstimationConfig.ENABLE_FLOW_STYLE.append(key)
 
 class PlotConfig:
     def __init__(self, data_dictionary):
@@ -53,7 +57,6 @@ class ReconstructionPlotConfig(PlotConfig):
         data_dictionary['environment'] = self.environment
         return data_dictionary
 
-
 class MuSeqPoseConfig(PoseEstimationConfig):
 
     def __init__(self, path):
@@ -65,7 +68,6 @@ class MuSeqPoseConfig(PoseEstimationConfig):
         pipelines = glob.glob(os.path.join(self.pipeline_directory, '*.pipeline'))
         for pipeline in pipelines:
             try:
-
                 self.loaded_pipelines[Path(pipeline).stem] = json.load(open(pipeline))
             except:
                 pass
@@ -105,10 +107,10 @@ class MuSeqPoseConfig(PoseEstimationConfig):
 
     def export_dict(self):
         data_dict = super(MuSeqPoseConfig, self).export_dict()
+        data_dict['pipeline_directory'] = str(self.pipeline_directory)
         data_dict['sync_views'] = self.sync_views
         data_dict['reprojection_toolbox'] = self.reprojection_toolbox_enabled
         data_dict['behaviours'] = self.behaviours
-        data_dict['pipeline_directory'] = self.pipeline_directory
         data_dict['calibration_toolbox'] = {'enabled': self.calibration_toolbox_enabled}
         data_dict['calibration_toolbox']['static_points'] = self.calibration_static_points
         data_dict['calibration_toolbox']['views'] = {
