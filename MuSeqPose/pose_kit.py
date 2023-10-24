@@ -1,6 +1,7 @@
 import glob
 import os
 import sys
+import traceback
 from random import randint
 
 import numpy as np
@@ -14,8 +15,10 @@ from MuSeqPose.config import MuSeqPoseConfig
 from MuSeqPose.player_interface.PlotPlayer import ReconstructionPlayer, LinePlotPlayer
 from MuSeqPose.player_interface.VideoPlayer import VideoPlayer
 from MuSeqPose.utils.session_manager import SessionManager
+from MuSeqPose.widgets.AlignmentWidget import AlignmentDialog
 from MuSeqPose.widgets.AnnotationWidget import AnnotationWidget
 from MuSeqPose.widgets.CalibrationWidget import CalibrationDialog
+from MuSeqPose.widgets.OptiPosePipeline import OptiPoseWidget
 from MuSeqPose.widgets.PipelineWidget import PipelineWidget
 from MuSeqPose.widgets.PlayControlWidget import PlayControlWidget
 from MuSeqPose.widgets.SyncViewWidget import SyncViewWidget
@@ -38,6 +41,9 @@ class MuSeqPoseKit(QApplication):
         self.ui.actionCalibration.setEnabled(False)
         self.ui.actionCalibration.triggered.connect(self.generate_calibration_data)
         self.ui.actionImport_DLT_Coefficients.triggered.connect(self.import_dlt_coefficients)
+        self.ui.actionAxes_Aignment.setEnabled(False)
+        self.ui.actionAxes_Aignment.triggered.connect(self.align_axes)
+        self.ui.actionReload_Config.triggered.connect(self.reload_data)
         self.views = []
         self.file_name = None
         self.config = None
@@ -49,7 +55,9 @@ class MuSeqPoseKit(QApplication):
 
     def save_config_event(self):
         save_config(self.config.path, self.config.export_dict())
-
+    def align_axes(self):
+        widget = AlignmentDialog(self.ui,self.session_manager)
+        widget.show()
     def import_dlt_coefficients(self):
         file = QFileDialog.getOpenFileName(self.ui, f"Load DLT Coefficient File",
                                            self.config.output_folder, 'CSV (*.csv)')[0]
@@ -60,6 +68,8 @@ class MuSeqPoseKit(QApplication):
                 order = open(order, 'r')
                 self.config = update_config_dlt_coeffs(self.config, file, order.read().strip().split(' '))
                 save_config(self.config.path, self.config.export_dict())
+                if all([view.is_dlt_valid() for view in self.config.views.values()]):
+                    self.ui.actionAxes_Aignment.setEnabled(True)
             except Exception as ex:
                 QMessageBox.warning(self.ui, 'Error', f'Could not load DLT Coefficients\n{ex}')
                 return
@@ -70,14 +80,15 @@ class MuSeqPoseKit(QApplication):
         if not os.path.exists(os.path.join(self.config.output_folder, 'calibration', 'candidates')):
             candidates = pick_calibration_candidates(self.config, self.session_manager.get_2D_data_readers(),
                                                      resolution,
-                                                     int(resolution[0] * 0.1))
+                                                     int(resolution[0] * 0.01),max_frames=30)
         else:
             key = list(self.config.views.keys())[0]
             candidates = [int(os.path.basename(file_name).split('.')[0]) for file_name in
                           glob.glob(os.path.join(self.config.output_folder, 'calibration', 'candidates', key, '*.png'))]
-        if len(candidates) <= 10:
-            QMessageBox.warning(self.ui, 'Error', 'Could not find at least 10 common annotated-frame instances.')
+        if len(candidates) < 7:
+            QMessageBox.warning(self.ui, 'Error', 'Could not find at least 7 common annotated-frame instances.')
             return
+        QMessageBox.information(self.ui, 'Candidates Found!', f'{len(candidates)} candidates found for calibration!')
         dialog = CalibrationDialog(self.ui, self.session_manager, candidates)
 
     def reset_app(self):
@@ -92,6 +103,7 @@ class MuSeqPoseKit(QApplication):
         self.file_name = None
         self.config = None
         self.ui.actionCalibration.setEnabled(False)
+        self.ui.actionAxes_Aignment.setEnabled(False)
         self.current_view_index = 0
         self.players = {}
         self.session_manager = None
@@ -108,8 +120,21 @@ class MuSeqPoseKit(QApplication):
             self.file_name = file_name
             self.load_data()
 
+    def reload_data(self):
+        if self.file_name:
+            btn = QMessageBox.question(self.ui, "Reload Data", "Are you sure?")
+            if btn == QMessageBox.Yes:
+                fname = self.file_name
+                self.reset_app()
+                self.file_name = fname
+                self.load_data()
+
     def load_data(self):
-        self.config = MuSeqPoseConfig(self.file_name)
+        try:
+            self.config = MuSeqPoseConfig(self.file_name)
+        except AssertionError as ex:
+            traceback.print_exception(ex)
+            return
         self.session_manager = SessionManager(self.config)
         self.ui.setWindowTitle(f'MuSeq Pose Kit : {self.config.project_name}')
         while len(self.config.colors) < self.config.num_parts + len(self.config.calibration_static_points):
@@ -138,6 +163,8 @@ class MuSeqPoseKit(QApplication):
             self.ui.viewTabWidget.addTab(sync_controller, "sync")
         pipeline_widget = PipelineWidget(self.session_manager)
         self.ui.actionCalibration.setEnabled(self.config.calibration_toolbox_enabled)
+        if all([view.is_dlt_valid() for view in self.config.views.values()]):
+            self.ui.actionAxes_Aignment.setEnabled(True)
         self.views.append(pipeline_widget)
         self.ui.viewTabWidget.addTab(pipeline_widget, "Pipeline")
         self.current_view_index = 0

@@ -17,7 +17,7 @@ def get_icon(name,size=(32,32),color=(255,255,255)):
         color = QColor(*color)
         color_str = color.name()
         svg_data = open(str(file),'r').read()
-        svg_data = svg_data.replace('fill="#FFFFFF"',f'fill="{color_str}"')
+        svg_data = svg_data.replace('#FFFFFF',color_str)
         image = QImage(*size, QImage.Format_ARGB32)
         image.fill(Qt.transparent)
         renderer = QSvgRenderer(QByteArray(svg_data.encode()))

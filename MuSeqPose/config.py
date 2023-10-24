@@ -77,9 +77,11 @@ class MuSeqPoseConfig(PoseEstimationConfig):
         if self.calibration_toolbox_enabled:
             self.calibration_static_points = self.data_dictionary['calibration_toolbox'].get('static_points', [])
             for view in self.views.values():
-                if view.f_px == -1 or len(view.principal_point) == 0 or len(view.resolution) == 0:
-                    print("Camera information missing. Disabling calibration tool...")
-                    self.calibration_toolbox_enabled = False
+                # if view.f_px == -1 or len(view.principal_point) == 0 or len(view.resolution) == 0:
+                #     print("Camera information missing. Disabling calibration tool...")
+                #     self.calibration_toolbox_enabled = False
+                view.principal_point = [-1,-1] if len(view.principal_point)==0 else view.principal_point
+                view.resolution = [-1, -1] if len(view.resolution) == 0 else view.resolution
             self.calibration_static_point_locations = {view: {} for view in self.views}
             for view in self.views:
                 for static_point in self.calibration_static_points:
@@ -87,7 +89,7 @@ class MuSeqPoseConfig(PoseEstimationConfig):
                         'calibration_toolbox'].get('views', {}).get(view, {}).get(static_point, [-1, -1])
         self.reprojection_toolbox_enabled = not self.calibration_toolbox_enabled and self.data_dictionary.get(
             'reprojection_toolbox', False) and all(
-            [self.annotation_views[annotation].view is not None for annotation in self.annotation_views])
+            [self.annotation_views[annotation].view is not None for annotation in self.annotation_views]) and all([view.is_dlt_valid() for view in self.views.values()])
         self.behaviours = self.data_dictionary.get('behaviours', [])
         if len(self.behaviours) == 0:
             self.behaviours.append("NA")
