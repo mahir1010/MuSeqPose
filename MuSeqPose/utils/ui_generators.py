@@ -5,6 +5,7 @@ from PySide2.QtGui import QIntValidator, QDoubleValidator, QRegExpValidator, QVa
 from PySide2.QtWidgets import QCheckBox, QRadioButton, QWidget, QLineEdit, QHBoxLayout, QLabel, QComboBox, \
     QDoubleSpinBox, QFileDialog, QPushButton, QMessageBox
 
+from MuSeqPose import get_icon
 from MuSeqPose.config import MuSeqPoseConfig
 from MuSeqPose.utils.FlowLayout import FlowLayout
 from MuSeqPose.utils.session_manager import SessionManager
@@ -27,6 +28,20 @@ def generate_checkboxes(names: list, checked=True):
         buttons[-1].setChecked(checked)
     return buttons
 
+class DeletableLabels(QWidget):
+
+    delete_event = Signal()
+    def __init__(self,label_text):
+        layout = QHBoxLayout()
+        layout.setMargin(0)
+        delete_btn = QPushButton()
+        delete_btn.setIcon(get_icon('cancel.svg'))
+        delete_btn.clicked.connect(lambda:self.delete_event.emit())
+        label = QLabel(label_text)
+        layout.addWidget(label)
+        layout.addStretch(1)
+        layout.addWidget(delete_btn)
+        self.setLayout(layout)
 
 class SessionFileLoader(QWidget):
     file_loaded = Signal()
@@ -351,7 +366,7 @@ class NumpyField(BaseInputWidget):
 
     def load_file(self, event):
         self.file_path = QFileDialog.getOpenFileName(self, f"Load Numpy File",
-                                                     self.config.output_folder, 'Numpy (*.npy,*.npz)')[0]
+                                                     self.config.output_folder, 'Numpy (*.npy *.npz)')[0]
         self.value_changed.emit()
         if self.file_path:
             self.file_btn.setText(self.file_path)
@@ -408,9 +423,15 @@ class ViewsField(BaseInputWidget):
 
         self.flow_layout = FlowLayout()
         self._layout.addLayout(self.flow_layout, 1)
-        self.input_fields = generate_checkboxes(self.config.views, False)
+        if self.metadata.min_val == self.metadata.max_val ==1:
+            self.input_fields = generate_radio_buttons(self.config.views)
+        else:
+            self.input_fields = generate_checkboxes(self.config.views, False)
         for field in self.input_fields:
-            field.stateChanged.connect(lambda: self.value_changed.emit())
+            if type(field)==QRadioButton:
+                field.toggled.connect(lambda x: self.value_changed.emit())
+            else:
+                field.stateChanged.connect(lambda: self.value_changed.emit())
             self.flow_layout.addWidget(field)
         self.setToolTip(metadata.tooltip)
         self.setLayout(self._layout)
@@ -420,12 +441,16 @@ class ViewsField(BaseInputWidget):
             field.setChecked(False)
 
     def is_valid(self):
-        return self.metadata.min_val <= len(self.get_output()) <= self.metadata.max_val
+        output = self.get_output()
+        return self.metadata.min_val <= (len(output) if type(output)==list else 1) <= self.metadata.max_val
 
     def get_output(self):
-        return [cb.text() for cb in self.input_fields if cb.isChecked()]
+        candidates = [cb.text() for cb in self.input_fields if cb.isChecked()]
+        return candidates if len(candidates)>1 else candidates[0]
 
     def set_data(self, data: list):
+        if type(data)!=list:
+            data = [data]
         for checkbox in self.input_fields:
             if checkbox.text() in data:
                 checkbox.setChecked(True)
