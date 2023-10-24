@@ -47,7 +47,7 @@ class OptiPoseWidget(QWidget):
         self.ui.recon_algorithm.addItems(['default', 'auto_subset'])
         self.ui.recon_algorithm.setCurrentIndex(1)
         self.setLayout(self.ui.layout())
-        self.ui.axes_annotation_btn.clicked.connect(lambda x: AlignmentDialog(self, self.config, session_manager))
+        self.ui.axes_annotation_btn.clicked.connect(lambda x: AlignmentDialog(self, session_manager))
         self.ui.alignment_matrix_btn.clicked.connect(self.update_alignment_data)
         self.ui.recon_scale.setText(str(self.config.computed_scale))
         self.ui.recon_threshold.setValue(self.config.threshold)
