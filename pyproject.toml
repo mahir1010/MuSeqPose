@@ -3,7 +3,7 @@ requires = ["setuptools>=67.0"]
 build-backend = "setuptools.build_meta"
 [project]
 name = "MuSeqPose"
-version = "0.0.2"
+version = "0.0.2.1"
 authors = [
     { name = "Mahir Patel", email = "mahirp@bu.edu" },
 ]
