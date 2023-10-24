@@ -118,7 +118,7 @@ class ReconstructionPlayer(PlotPlayer):
         self.max_limits = view_data.normalization_max_limit
         self.min_limits = view_data.normalization_min_limit
         self.threshold = self.config.threshold
-        self.scene_canvas = SceneCanvas(size=size)
+        self.scene_canvas = SceneCanvas(size=size,vsync=True)
         self.scene_canvas.unfreeze()
         view = self.scene_canvas.central_widget.add_view()
         view.camera = cameras.TurntableCamera(elevation=40, fov=30, distance=1)
