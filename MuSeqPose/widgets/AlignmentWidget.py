@@ -1,11 +1,13 @@
 from PySide2.QtCore import QFile
 from PySide2.QtUiTools import QUiLoader
-from PySide2.QtWidgets import QDialog
+from PySide2.QtWidgets import QDialog, QMessageBox
 
 from MuSeqPose import get_resource
 from MuSeqPose.ui_Skeleton import Marker
 from MuSeqPose.utils.session_manager import SessionManager
+from MuSeqPose.utils.ui_generators import generate_checkboxes
 from MuSeqPose.widgets.ImageViewer import AnnotationImageViewer
+from cvkit.pose_estimation.reconstruction.EasyWand_tools import update_alignment_matrices
 
 
 class AlignmentDialog(QDialog):
@@ -16,7 +18,7 @@ class AlignmentDialog(QDialog):
     ]
     KEYS = ['origin', 'x_max', 'y_max']
 
-    def __init__(self, parent, session_manager: SessionManager):
+    def __init__(self, parent, session_manager: SessionManager,target_views=None):
         super(AlignmentDialog, self).__init__(parent)
         self.frame_number = 0
         self.config = session_manager.config
@@ -32,9 +34,17 @@ class AlignmentDialog(QDialog):
         self.ui.exit_btn.clicked.connect(self.close)
         self.max_frames = 0
         max_init = False
-        for index, view in enumerate(self.config.views):
+        if session_manager.config.x_len>0:
+            self.ui.x_len_edit.setText(str(session_manager.config.x_len))
+        if session_manager.config.y_len>0:
+            self.ui.y_len_edit.setText(str(session_manager.config.y_len))
+        if target_views is None:
+            target_views = self.config.views
+        self.checkboxes = generate_checkboxes(target_views,True)
+        for index, view in enumerate(target_views):
             if view not in self.config.annotation_views:
                 continue
+            self.ui.select_views.layout().addWidget(self.checkboxes[index])
             widget = AnnotationImageViewer()
             widget.draw_frame(session_manager.session_video_readers[view].random_access_image(self.frame_number))
             if not max_init:
@@ -60,7 +70,29 @@ class AlignmentDialog(QDialog):
         self.ui.frame_slider.setMinimum(0)
         self.ui.frame_slider.setMaximum(self.max_frames)
         self.ui.frame_slider.valueChanged.connect(self.change_frame)
+        self.ui.reset_btn.clicked.connect(self.reset_view)
+        self.ui.align_btn.clicked.connect(self.align_axes)
         self.show()
+
+    def align_axes(self,event):
+        alignment_source = [checkbox.text() for checkbox in self.checkboxes if checkbox.isChecked()]
+        try:
+            self.config.x_len = float(self.ui.x_len_edit.text())
+            self.config.y_len = float(self.ui.y_len_edit.text())
+        except:
+            self.config.x_len = 0
+            self.config.y_len = 0
+        if len(alignment_source) < 2:
+            QMessageBox.warning(self, "Error", "Need at least 2 views for alignment")
+            return
+        ret = update_alignment_matrices(self.config, alignment_source)
+        if ret:
+            QMessageBox.information(self, "Success", f"Alignment matrices generated\nComputed Scale:{round(self.config.computed_scale,2)}")
+        else:
+            QMessageBox.warning(self, "Error", "Error while generating alignment matrices")
+    def reset_view(self,event):
+        index = self.ui.view_container.currentIndex()
+        self.widgets[index].fitInView()
 
     def annotate(self, pos):
         index = self.ui.view_container.currentIndex()
