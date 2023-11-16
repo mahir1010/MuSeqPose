@@ -5,9 +5,9 @@ import numpy as np
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
 from vispy.scene import SceneCanvas, cameras, XYZAxis, Plane
-from vispy.scene.visuals import LinePlot, Box
+from vispy.scene.visuals import LinePlot, Box,Image
 from vispy.visuals.filters.mesh import ShadingFilter
-from vispy.visuals.transforms import STTransform
+from vispy.visuals.transforms import STTransform,MatrixTransform
 
 from MuSeqPose.config import PlotConfig, ReconstructionPlotConfig, LinePlotConfig
 from MuSeqPose.player_interface.PlayerInterface import PlayerInterface
@@ -49,10 +49,10 @@ class PlotPlayer(PlayerInterface, ABC):
             self.scene_canvas.close()
 
     def render_previous_frame(self):
-        self.frame_number = max(0, self.frame_number - 1)
+        self.frame_number = max(0, self.frame_number - 2)
 
     def seek(self, frame_number):
-        self.frame_number = max(0, frame_number)
+        self.frame_number = max(0, frame_number-1)
 
     def get_number_of_frames(self):
         return len(self.data_store)
@@ -114,19 +114,20 @@ class ReconstructionPlayer(PlotPlayer):
 
     def __init__(self, session_manager: SessionManager, view_name, view_data: ReconstructionPlotConfig):
         super(ReconstructionPlayer, self).__init__(session_manager, view_name, view_data)
+        import cv2
         size = view_data.size
         self.max_limits = view_data.normalization_max_limit
         self.min_limits = view_data.normalization_min_limit
         self.threshold = self.config.threshold
-        self.scene_canvas = SceneCanvas(size=size,vsync=True)
+        self.scene_canvas = SceneCanvas(size=size,vsync=True,bgcolor='white')
         self.scene_canvas.unfreeze()
         view = self.scene_canvas.central_widget.add_view()
         view.camera = cameras.TurntableCamera(elevation=40, fov=30, distance=1)
         view.camera.center = (0.5, 0.5, 0)
         self.markers = {}
         self.lines = []
-        self.line = LinePlot(np.zeros((self.config.num_parts, 3)), width=2, color=view_data.color, parent=view.scene,
-                             connect=np.array([[0, 1]]), marker_size=4, symbol='o', edge_width=2, face_color='white')
+        self.line = LinePlot(np.zeros((self.config.num_parts, 3)), width=5, color=view_data.color, parent=view.scene,
+                             connect=np.array([[0, 1]]), marker_size=8, symbol='o', edge_width=5, face_color='white')
         self.scene_canvas.freeze()
         for item in view_data.environment.values():
             view.add(get_visual(item))

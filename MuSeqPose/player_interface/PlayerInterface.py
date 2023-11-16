@@ -11,7 +11,7 @@ class PlayerInterface(ABC):
         self.view_name = view_name
         self.view_data = view_data
         self.data_store = None
-        self.frame_number = 0
+        self.frame_number = -1
         self.is_video_playing = False
         self.data_point = None
 
