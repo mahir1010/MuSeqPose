@@ -244,6 +244,7 @@ class AnnotationWidget(PlayControlWidget):
             return
         for name in self.interp_candidate_set:
             part_initial = self.video_player.data_store.get_part(self.interp_initial_index_frame, name)
+            part_initial.likelihood = 1.0
             part_current = self.video_player.data_store.get_part(self.frame_number, name)
             additive_coordinates = (part_current - part_initial) / total_frames
             for i in range(self.interp_initial_index_frame, self.frame_number):
